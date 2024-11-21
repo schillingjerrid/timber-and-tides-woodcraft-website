@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
-    "build": "npx next build && touch out/.nojekyll",
+    "build": "next build && touch out/.nojekyll",
     "start": "next start",
     "lint": "next lint"
   },
