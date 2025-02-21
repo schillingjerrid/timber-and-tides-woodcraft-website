@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
-import { twMerge } from "tailwind-merge";
-import { ThemeProvider } from "@/components/ThemeProvider";
 
-const dmSans = DM_Sans({ subsets: ["latin"] });
+const poppins = Poppins({subsets: ["latin"], weight: ["100", "200", "400", "700", "900"] });
 
 export const metadata: Metadata = {
   title: "Timber And Tides Woodcraft",
@@ -17,18 +15,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="relative" suppressHydrationWarning>
+    <html lang="en">
       <body
-        className={twMerge(dmSans.className, "antialiased bg-[#343434]")}
+        className={`${poppins.className} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        {children}
       </body>
     </html>
   );
