@@ -1,0 +1,80 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { getCollection } from "astro:content";
+
+const projects = await getCollection("projects");
+const featured = projects
+  .filter((p) => p.data.featured)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 6);
+---
+
+<BaseLayout
+  title="Woodshop — Portfolio"
+  description="Handcrafted woodworking projects, client feedback, and commission requests."
+>
+  <section class="py-10">
+    <h1 class="text-3xl sm:text-4xl font-bold tracking-tight">
+      Handcrafted woodworking, built to last.
+    </h1>
+    <p class="mt-3 max-w-2xl text-zinc-300">
+      I build custom pieces and thoughtful gifts — tables, shelves, cabinets, and more.
+      Browse recent work, read client feedback, and reach out to request a commission.
+    </p>
+
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a
+        href="/projects/"
+        class="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-zinc-200 transition"
+      >
+        View Projects
+      </a>
+      <a
+        href="/contact/"
+        class="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-semibold text-zinc-100 hover:bg-zinc-800 transition"
+      >
+        Request a Commission
+      </a>
+    </div>
+  </section>
+
+  <section class="mt-8">
+    <div class="flex items-end justify-between gap-4">
+      <h2 class="text-xl font-semibold">Featured Projects</h2>
+      <a href="/projects/" class="text-sm text-zinc-300 hover:text-white">See all →</a>
+    </div>
+
+    {featured.length === 0 ? (
+      <p class="mt-4 text-zinc-300">
+        Add a project in <code class="text-zinc-200">src/content/projects</code> to get started.
+      </p>
+    ) : (
+      <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {featured.map((p) => (
+          <ProjectCard
+            href={`/projects/${p.slug}/`}
+            title={p.data.title}
+            excerpt={p.data.excerpt}
+            coverImage={p.data.coverImage}
+            tags={p.data.tags}
+          />
+        ))}
+      </div>
+    )}
+  </section>
+
+  <section class="mt-10 rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6">
+    <h2 class="text-lg font-semibold">Plans Coming Soon</h2>
+    <p class="mt-2 text-sm text-zinc-300 max-w-2xl">
+      I’m working on publishing a small library of plans and cut lists. Check back later — or email me if there’s a plan you’d love to see.
+    </p>
+    <a
+      href="/contact/"
+      class="mt-4 inline-flex rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-semibold text-zinc-100 hover:bg-zinc-800 transition"
+    >
+      Suggest a plan idea
+    </a>
+  </section>
+
+</BaseLayout>

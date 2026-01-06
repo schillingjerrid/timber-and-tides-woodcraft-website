@@ -1,0 +1,18 @@
+---
+const { images = [], altPrefix = "Project photo" } = Astro.props;
+---
+
+{images.length > 0 && (
+  <div class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+    {images.map((src, i) => (
+      <div class="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900">
+        <img
+          src={src}
+          alt={`${altPrefix} ${i + 1}`}
+          loading="lazy"
+          class="h-full w-full object-cover"
+        />
+      </div>
+    ))}
+  </div>
+)}

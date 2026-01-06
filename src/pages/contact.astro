@@ -1,0 +1,34 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const EMAIL = "you@example.com";
+const SUBJECT = "Commission Request";
+const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(SUBJECT)}`;
+---
+
+<BaseLayout title="Contact — Woodshop" description="Request a commission via email.">
+  <section class="py-8">
+    <h1 class="text-3xl font-bold tracking-tight">Contact</h1>
+    <p class="mt-2 text-zinc-300 max-w-2xl">
+      Want a custom piece? Email me with a quick description and I’ll get back to you with questions, timing, and an estimate.
+    </p>
+
+    <div class="mt-6 rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6">
+      <p class="text-sm text-zinc-300">Email</p>
+      <a class="mt-1 block text-lg font-semibold text-white hover:underline" href={mailto}>
+        {EMAIL}
+      </a>
+
+      <div class="mt-6">
+        <h2 class="text-base font-semibold">What to include</h2>
+        <ul class="mt-2 list-disc pl-5 text-sm text-zinc-300 space-y-1">
+          <li>What you want built + any inspiration photos/links</li>
+          <li>Approximate dimensions</li>
+          <li>Preferred wood species + finish (if you know)</li>
+          <li>Deadline (if any)</li>
+          <li>Budget range (helps me propose options)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
