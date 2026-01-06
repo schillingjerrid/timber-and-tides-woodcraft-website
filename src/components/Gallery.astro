@@ -1,11 +1,18 @@
 ---
-const { images = [], altPrefix = "Project photo" } = Astro.props;
+type Props = {
+  images?: string[];
+  altPrefix?: string;
+};
+
+const props = Astro.props as Props;
+const images: string[] = props.images ?? [];
+const altPrefix: string = props.altPrefix ?? "Project photo";
 ---
 
 {images.length > 0 && (
   <div class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-    {images.map((src, i) => (
-      <div class="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900">
+    {images.map((src: string, i: number) => (
+      <div class="overflow-hidden rounded-xl border border-border bg-surface">
         <img
           src={src}
           alt={`${altPrefix} ${i + 1}`}
