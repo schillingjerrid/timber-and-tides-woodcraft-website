@@ -24,12 +24,41 @@ const {
 
   <body class="min-h-screen bg-bg text-fg">
     <div class="mx-auto max-w-6xl px-4">
-      <header class="py-6 flex items-center justify-between gap-4">
-        <a href="/" class="font-semibold tracking-tight text-lg text-fg">
+      <header
+        class="py-6 flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left"
+      >
+        <a
+          href="/"
+          class="font-semibold tracking-tight text-base leading-tight text-fg sm:text-lg"
+        >
           Timber and Tides Woodcraft
         </a>
 
-        <nav class="flex gap-4 text-sm text-muted">
+        <button
+          class="inline-flex items-center gap-2 text-sm text-muted transition hover:text-fg sm:hidden"
+          type="button"
+          aria-expanded="false"
+          aria-controls="site-nav"
+          data-nav-toggle
+        >
+          <span class="sr-only">Toggle navigation</span>
+          <svg
+            aria-hidden="true"
+            class="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          Menu
+        </button>
+
+        <nav
+          id="site-nav"
+          class="hidden w-full flex flex-col items-center gap-3 text-sm text-muted sm:flex sm:w-auto sm:flex-row sm:gap-4"
+        >
           <a class="hover:text-fg transition" href="/projects/">Projects</a>
           <a class="hover:text-fg transition" href="/testimonials/">Feedback</a>
           <a class="hover:text-fg transition" href="/contact/">Contact</a>
@@ -48,5 +77,18 @@ const {
         </div>
       </footer>
     </div>
+
+    <script>
+      const toggleButton = document.querySelector("[data-nav-toggle]");
+      const nav = document.querySelector("#site-nav");
+
+      if (toggleButton && nav) {
+        toggleButton.addEventListener("click", () => {
+          const isExpanded = toggleButton.getAttribute("aria-expanded") === "true";
+          toggleButton.setAttribute("aria-expanded", String(!isExpanded));
+          nav.classList.toggle("hidden");
+        });
+      }
+    </script>
   </body>
 </html>
