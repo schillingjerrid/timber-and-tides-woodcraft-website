@@ -23,9 +23,9 @@ const {
   </head>
 
   <body class="min-h-screen bg-bg text-fg">
-    <div class="mx-auto max-w-6xl px-4">
-      <header
-        class="py-6 flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left"
+    <header class="py-6">
+      <div
+        class="relative mx-auto flex max-w-6xl flex-col items-center gap-4 px-4 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left"
       >
         <a
           href="/"
@@ -52,41 +52,64 @@ const {
           >
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
-          Menu
         </button>
 
         <nav
           id="site-nav"
-          class="hidden w-full flex flex-col items-center gap-3 text-sm text-muted sm:flex sm:w-auto sm:flex-row sm:gap-4"
+          class="absolute left-0 right-0 top-full z-20 mt-4 flex w-full flex-col items-center gap-3 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/95 px-6 py-4 text-sm text-muted shadow-lg backdrop-blur transition-[max-height,opacity,transform] duration-300 ease-out max-h-0 opacity-0 -translate-y-2 pointer-events-none sm:static sm:mt-0 sm:flex sm:w-auto sm:flex-row sm:gap-4 sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none sm:backdrop-blur-none sm:max-h-none sm:opacity-100 sm:translate-y-0 sm:pointer-events-auto sm:overflow-visible"
         >
           <a class="hover:text-fg transition" href="/projects/">Projects</a>
           <a class="hover:text-fg transition" href="/testimonials/">Feedback</a>
           <a class="hover:text-fg transition" href="/contact/">Contact</a>
         </nav>
-      </header>
+      </div>
+    </header>
 
+    <main class="pb-16">
+      <slot />
+    </main>
 
-      <main class="pb-16">
-        <slot />
-      </main>
-
-      <footer class="border-t border-zinc-800 py-8 text-sm text-zinc-400">
-        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <p>&copy; {new Date().getFullYear()} Timber and Tides Woodcraft</p>
-          <p class="text-zinc-500">Colorado • Commissions welcome</p>
-        </div>
-      </footer>
-    </div>
+    <footer class="border-t border-zinc-800 py-8 text-sm text-zinc-400">
+      <div class="mx-auto flex max-w-6xl flex-col gap-2 px-4 sm:flex-row sm:items-center sm:justify-between">
+        <p>&copy; {new Date().getFullYear()} Timber and Tides Woodcraft</p>
+        <p class="text-zinc-500">Colorado • Commissions welcome</p>
+      </div>
+    </footer>
 
     <script>
       const toggleButton = document.querySelector("[data-nav-toggle]");
       const nav = document.querySelector("#site-nav");
 
       if (toggleButton && nav) {
-        toggleButton.addEventListener("click", () => {
-          const isExpanded = toggleButton.getAttribute("aria-expanded") === "true";
-          toggleButton.setAttribute("aria-expanded", String(!isExpanded));
-          nav.classList.toggle("hidden");
+        const openClasses = ["max-h-96", "opacity-100", "translate-y-0", "pointer-events-auto"];
+        const closedClasses = ["max-h-0", "opacity-0", "-translate-y-2", "pointer-events-none"];
+        let isOpen = false;
+
+        const setNavState = (nextOpen) => {
+          isOpen = nextOpen;
+          toggleButton.setAttribute("aria-expanded", String(isOpen));
+          openClasses.forEach((cls) => nav.classList.toggle(cls, isOpen));
+          closedClasses.forEach((cls) => nav.classList.toggle(cls, !isOpen));
+        };
+
+        const toggleNav = () => setNavState(!isOpen);
+
+        toggleButton.addEventListener("click", (event) => {
+          event.stopPropagation();
+          toggleNav();
+        });
+
+        document.addEventListener("click", (event) => {
+          if (!isOpen) return;
+          const target = event.target;
+          if (target instanceof Node && (nav.contains(target) || toggleButton.contains(target))) return;
+          setNavState(false);
+        });
+
+        window.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") {
+            setNavState(false);
+          }
         });
       }
     </script>
