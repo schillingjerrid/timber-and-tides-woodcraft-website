@@ -85,7 +85,7 @@ const {
         const closedClasses = ["max-h-0", "opacity-0", "-translate-y-2", "pointer-events-none"];
         let isOpen = false;
 
-        const setNavState = (nextOpen) => {
+        const setNavState = (nextOpen: boolean) => {
           isOpen = nextOpen;
           toggleButton.setAttribute("aria-expanded", String(isOpen));
           openClasses.forEach((cls) => nav.classList.toggle(cls, isOpen));
