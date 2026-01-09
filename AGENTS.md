@@ -1,5 +1,8 @@
 # Timber & Tides Woodcraft site (Astro)
 
+## Project type
+Node.js / npm (Astro)
+
 ## Install
 Use npm and the lockfile:
 - npm ci
