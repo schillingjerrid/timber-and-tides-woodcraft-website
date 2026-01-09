@@ -1,5 +1,6 @@
 ---
 import "../styles/theme.css";
+import logoMark from "../../public/images/logos/tatw-logo_filled.svg?raw";
 
 const {
   title = "Timber and Tides Woodcraft",
@@ -17,9 +18,7 @@ const {
 
     <meta name="theme-color" content="#0b0f0e" />
 
-    <!-- <link rel="icon" href="/favicon.ico" /> -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- <link rel="apple-touch-icon" href="/apple-touch-icon.png" /> -->
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
   </head>
 
   <body class="min-h-screen bg-bg text-fg">
@@ -27,11 +26,13 @@ const {
       <div
         class="relative mx-auto flex max-w-6xl flex-col items-center gap-4 px-4 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left"
       >
-        <a
-          href="/"
-          class="font-semibold tracking-tight text-base leading-tight text-fg sm:text-lg"
-        >
-          Timber and Tides Woodcraft
+        <a href="/" class="inline-flex items-center" aria-label="Timber and Tides Woodcraft home">
+          <span
+            class="logo-mark h-10 w-40 sm:h-12 sm:w-48"
+            aria-hidden="true"
+            set:html={logoMark}
+          ></span>
+          <span class="sr-only">Timber and Tides Woodcraft</span>
         </a>
 
         <button
