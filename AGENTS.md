@@ -12,3 +12,4 @@ Use a static build as the verification step:
 ## Notes
 - Node: 24.12.0
 - This is a static Astro site deployed to GitHub Pages.
+- Some sandboxes may not have reliable npm registry access. Use GitHub Actions CI as the source of truth.
