@@ -21,45 +21,86 @@ const {
   </head>
 
   <body class="min-h-screen bg-bg text-fg">
-    <header class="py-6">
-      <div
-        class="relative mx-auto flex max-w-6xl flex-col items-center gap-4 px-4 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left"
-      >
-        <a href="/" class="inline-flex items-center" aria-label="Timber and Tides Woodcraft home">
+    <!-- Sticky header with scroll-hide behaviour -->
+    <header
+      id="site-header"
+      class="sticky top-0 z-50 border-b border-border bg-bg/95 backdrop-blur-sm transition-transform duration-300 ease-in-out"
+    >
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+        <!-- Logo -->
+        <a href="/" class="inline-flex shrink-0 items-center" aria-label="Timber and Tides Woodcraft home">
           <img
             src="/images/logos/tatw-logo_filled.svg"
             alt="Timber and Tides Woodcraft"
-            class="h-10 w-auto sm:h-12"
+            class="h-10 w-auto"
           />
         </a>
 
+        <!-- Desktop nav -->
+        <nav class="hidden items-center gap-6 text-sm text-muted md:flex">
+          <a class="transition hover:text-fg" href="/projects/">Projects</a>
+          <a class="transition hover:text-fg" href="/testimonials/">Feedback</a>
+          <a class="transition hover:text-fg" href="/contact/">Contact</a>
+        </nav>
+
+        <!-- Hamburger toggle (mobile/tablet only) -->
         <button
-          class="inline-flex items-center gap-2 text-sm text-muted transition hover:text-fg sm:hidden"
+          id="nav-toggle"
+          class="inline-flex items-center justify-center rounded-md p-2 text-muted transition hover:text-fg md:hidden"
           type="button"
           aria-expanded="false"
-          aria-controls="site-nav"
-          data-nav-toggle
+          aria-controls="mobile-nav"
+          aria-label="Toggle navigation"
         >
-          <span class="sr-only">Toggle navigation</span>
+          <!-- Hamburger icon -->
           <svg
-            aria-hidden="true"
-            class="h-5 w-5"
+            id="icon-menu"
+            class="h-6 w-6"
             fill="none"
             stroke="currentColor"
             stroke-width="2"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
+          <!-- Close (X) icon -->
+          <svg
+            id="icon-close"
+            class="hidden h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
+      </div>
 
-        <nav
-          id="site-nav"
-          class="absolute left-0 right-0 top-full z-20 mt-4 flex w-full flex-col items-center gap-3 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/95 px-6 py-4 text-sm text-muted shadow-lg backdrop-blur transition-[max-height,opacity,transform] duration-300 ease-out max-h-0 opacity-0 -translate-y-2 pointer-events-none sm:static sm:mt-0 sm:flex sm:w-auto sm:flex-row sm:gap-4 sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none sm:backdrop-blur-none sm:max-h-none sm:opacity-100 sm:translate-y-0 sm:pointer-events-auto sm:overflow-visible"
-        >
-          <a class="hover:text-fg transition" href="/projects/">Projects</a>
-          <a class="hover:text-fg transition" href="/testimonials/">Feedback</a>
-          <a class="hover:text-fg transition" href="/contact/">Contact</a>
+      <!-- Mobile/tablet dropdown nav -->
+      <div
+        id="mobile-nav"
+        class="overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out md:hidden"
+        style="max-height: 0; opacity: 0;"
+      >
+        <nav class="flex flex-col gap-1 border-t border-border px-4 py-3">
+          <a
+            class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
+            href="/projects/"
+            data-mobile-nav-link
+          >Projects</a>
+          <a
+            class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
+            href="/testimonials/"
+            data-mobile-nav-link
+          >Feedback</a>
+          <a
+            class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
+            href="/contact/"
+            data-mobile-nav-link
+          >Contact</a>
         </nav>
       </div>
     </header>
@@ -68,7 +109,7 @@ const {
       <slot />
     </main>
 
-    <footer class="border-t border-zinc-800 py-8 text-sm text-zinc-400">
+    <footer class="border-t border-border py-8 text-sm text-zinc-400">
       <div class="mx-auto flex max-w-6xl flex-col gap-2 px-4 sm:flex-row sm:items-center sm:justify-between">
         <p>&copy; {new Date().getFullYear()} Timber and Tides Woodcraft</p>
         <p class="text-zinc-500">Made in Colorado • Commissions welcome</p>
@@ -76,41 +117,94 @@ const {
     </footer>
 
     <script>
-      const toggleButton = document.querySelector("[data-nav-toggle]");
-      const nav = document.querySelector("#site-nav");
+      // ── Mobile nav toggle ──────────────────────────────────────────────────
 
-      if (toggleButton && nav) {
-        const openClasses = ["max-h-96", "opacity-100", "translate-y-0", "pointer-events-auto"];
-        const closedClasses = ["max-h-0", "opacity-0", "-translate-y-2", "pointer-events-none"];
-        let isOpen = false;
+      const toggle = document.getElementById("nav-toggle");
+      const mobileNav = document.getElementById("mobile-nav");
+      const iconMenu = document.getElementById("icon-menu");
+      const iconClose = document.getElementById("icon-close");
 
-        const setNavState = (nextOpen: boolean) => {
-          isOpen = nextOpen;
-          toggleButton.setAttribute("aria-expanded", String(isOpen));
-          openClasses.forEach((cls) => nav.classList.toggle(cls, isOpen));
-          closedClasses.forEach((cls) => nav.classList.toggle(cls, !isOpen));
-        };
+      let navOpen = false;
 
-        const toggleNav = () => setNavState(!isOpen);
+      function setNavOpen(next: boolean) {
+        navOpen = next;
+        toggle?.setAttribute("aria-expanded", String(navOpen));
 
-        toggleButton.addEventListener("click", (event) => {
-          event.stopPropagation();
-          toggleNav();
-        });
+        if (!mobileNav) return;
 
-        document.addEventListener("click", (event) => {
-          if (!isOpen) return;
-          const target = event.target;
-          if (target instanceof Node && (nav.contains(target) || toggleButton.contains(target))) return;
-          setNavState(false);
-        });
+        if (navOpen) {
+          // Expand: set max-height to scrollHeight so CSS transition works
+          mobileNav.style.maxHeight = mobileNav.scrollHeight + "px";
+          mobileNav.style.opacity = "1";
+        } else {
+          mobileNav.style.maxHeight = "0";
+          mobileNav.style.opacity = "0";
+        }
 
-        window.addEventListener("keydown", (event) => {
-          if (event.key === "Escape") {
-            setNavState(false);
-          }
-        });
+        iconMenu?.classList.toggle("hidden", navOpen);
+        iconClose?.classList.toggle("hidden", !navOpen);
       }
+
+      // Toggle on button click
+      toggle?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        setNavOpen(!navOpen);
+      });
+
+      // Close when a nav link is clicked
+      document.querySelectorAll("[data-mobile-nav-link]").forEach((link) => {
+        link.addEventListener("click", () => setNavOpen(false));
+      });
+
+      // Close when clicking outside the header
+      document.addEventListener("click", (e) => {
+        if (!navOpen) return;
+        const header = document.getElementById("site-header");
+        if (header && e.target instanceof Node && !header.contains(e.target)) {
+          setNavOpen(false);
+        }
+      });
+
+      // Close on Escape
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && navOpen) setNavOpen(false);
+      });
+
+      // ── Scroll-hide / scroll-reveal ────────────────────────────────────────
+
+      const header = document.getElementById("site-header");
+      let lastScrollY = window.scrollY;
+      let ticking = false;
+
+      window.addEventListener(
+        "scroll",
+        () => {
+          if (ticking) return;
+          ticking = true;
+
+          window.requestAnimationFrame(() => {
+            const currentScrollY = window.scrollY;
+            const delta = currentScrollY - lastScrollY;
+
+            if (currentScrollY <= 0) {
+              // Always show at very top
+              header?.classList.remove("-translate-y-full");
+            } else if (delta > 8) {
+              // Scrolling down — hide
+              header?.classList.add("-translate-y-full");
+              // Also close mobile nav if open
+              if (navOpen) setNavOpen(false);
+            } else if (delta < -8) {
+              // Scrolling up — reveal
+              header?.classList.remove("-translate-y-full");
+            }
+
+            lastScrollY = currentScrollY;
+            ticking = false;
+          });
+        },
+        { passive: true }
+      );
     </script>
   </body>
 </html>
