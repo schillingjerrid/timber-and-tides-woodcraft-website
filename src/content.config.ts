@@ -1,5 +1,21 @@
 import { defineCollection, z } from "astro:content";
 
+const plans = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    excerpt: z.string().optional(),
+    file: z.string(), // path to downloadable PDF in /public
+    date: z.coerce.date(),
+    tags: z.array(z.string()).default([]),
+    difficulty: z.string().optional(), // e.g. "Beginner", "Intermediate", "Advanced"
+    dimensions: z.string().optional(),
+    materials: z.array(z.string()).default([]),
+    projectSlug: z.string().optional(), // link to related project
+  }),
+});
+
+
 const projects = defineCollection({
   type: "content",
   schema: z.object({
@@ -31,6 +47,7 @@ const testimonials = defineCollection({
 });
 
 export const collections = {
+  plans,
   projects,
   testimonials,
 };

@@ -15,6 +15,9 @@ if (!project) throw new Error(`Project not found: ${slug}`);
 
 const { Content } = await project.render();
 const d = project.data;
+
+const allPlans = await getCollection("plans");
+const relatedPlan = allPlans.find((p) => p.data.projectSlug === slug);
 ---
 
 <BaseLayout title={`${d.title} — Projects`} description={d.excerpt ?? "Woodworking project details."}>
@@ -31,17 +34,32 @@ const d = project.data;
         {d.dimensions && <span>• Size: {d.dimensions}</span>}
       </div>
 
-      {d.tags?.length > 0 && (
-        <div class="mt-4 flex flex-wrap gap-2">
-          {d.tags.map((t) => <TagPill tag={t} />)}
-        </div>
-      )}
+      <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
+        {d.tags?.length > 0 && (
+          <div class="flex flex-wrap gap-2">
+            {d.tags.map((t) => <TagPill tag={t} />)}
+          </div>
+        )}
+
+        {relatedPlan && (
+          <a
+            href={`/plans/${relatedPlan.slug}/`}
+            class="group inline-flex items-center gap-2 rounded-xl border border-secondary/40 bg-surface px-4 py-2 text-sm font-semibold text-secondary
+                   transition hover:border-secondary/70 hover:bg-surface-2 hover:text-fg"
+          >
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+            </svg>
+            View Plans
+          </a>
+        )}
+      </div>
 
       <div class="mt-6 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900">
         <img src={d.coverImage} alt={d.title} class="h-full w-full object-cover" />
       </div>
 
-      <div class="prose prose-invert mt-8 max-w-none prose-headings:tracking-tight prose-a:text-white">
+      <div class="project-content prose prose-invert mt-8 max-w-none prose-a:text-primary">
         <Content />
       </div>
 
@@ -49,3 +67,51 @@ const d = project.data;
     </div>
   </article>
 </BaseLayout>
+
+<style>
+  /* Style h2 section headers with steel blue accent */
+  .project-content :global(h2) {
+    margin-top: 2.25rem;
+    margin-bottom: 0.75rem;
+    padding-left: 0.875rem;
+    border-left: 3px solid #8ba2c2; /* --color-primary / steel blue */
+    font-size: 1.0625rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #f3f4f6; /* --color-fg */
+    text-transform: none;
+  }
+
+  /* Thin rule above each h2 for section separation */
+  .project-content :global(h2:not(:first-child)) {
+    margin-top: 2.25rem;
+  }
+
+  .project-content :global(h2:not(:first-child)::before) {
+    content: "";
+    display: block;
+    margin-bottom: 0.75rem;
+    border-top: 1px solid #23262b; /* --color-border */
+  }
+
+  /* Body text */
+  .project-content :global(p) {
+    color: #b6bcc2; /* --color-muted */
+    line-height: 1.7;
+  }
+
+  /* Lists */
+  .project-content :global(ul) {
+    padding-left: 1.25rem;
+  }
+
+  .project-content :global(li) {
+    color: #b6bcc2;
+    margin-bottom: 0.4rem;
+    padding-left: 0.25rem;
+  }
+
+  .project-content :global(li::marker) {
+    color: #8ba2c2; /* --color-primary */
+  }
+</style>
