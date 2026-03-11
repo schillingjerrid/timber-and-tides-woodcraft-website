@@ -6,18 +6,21 @@ const SUBJECT = "Commission Request";
 const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(SUBJECT)}`;
 ---
 
-<BaseLayout title="Contact — Timber & Tides Woodcraft" description="Request a commission via email.">
+<BaseLayout
+  title="Contact — Timber & Tides Woodcraft"
+  description="Request a commission via email."
+>
 
   <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
   <section class="relative overflow-hidden py-16">
     <div
-      class="absolute inset-0 bg-cover bg-center pointer-events-none"
-      style="background-image: url(‘/images/backgrounds/background-3_large.jpg’);"
+      class="absolute inset-0 pointer-events-none"
+      style="background-image: url('/images/backgrounds/background-4_large.jpg'); background-size: cover; background-position: center;"
     ></div>
     <div class="absolute inset-0 bg-zinc-900/65 pointer-events-none"></div>
 
-    <div class="relative mx-auto max-w-3xl px-4">
-      <p class="text-xs font-semibold uppercase tracking-widest text-primary">Get in Touch</p>
+    <div class="relative mx-auto max-w-6xl px-4">
+      <span class="inline-block rounded-full bg-black/50 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-primary ring-1 ring-inset ring-primary">Get in Touch</span>
       <h1 class="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Contact</h1>
       <p class="mt-4 text-lg text-fg leading-relaxed">
         Want a custom piece? Send me a note and I’ll get back to you with questions, timing, and an estimate.
@@ -27,7 +30,7 @@ const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(SUBJECT)}`;
 
   <!-- ── Email ──────────────────────────────────────────────────────────────── -->
   <section class="py-12">
-    <div class="mx-auto max-w-3xl px-4">
+    <div class="mx-auto max-w-6xl px-4">
       <p class="text-xs font-semibold uppercase tracking-widest text-muted">Email</p>
       <a class="mt-2 block text-2xl font-bold text-fg hover:text-white transition" href={mailto}>
         {EMAIL}
@@ -38,7 +41,7 @@ const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(SUBJECT)}`;
 
   <!-- ── What to include ────────────────────────────────────────────────────── -->
   <section class="bg-surface py-12">
-    <div class="mx-auto max-w-3xl px-4">
+    <div class="mx-auto max-w-6xl px-4">
       <h2 class="text-xl font-bold tracking-tight border-l-[3px] border-primary pl-3">
         What to include
       </h2>
@@ -71,7 +74,7 @@ const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(SUBJECT)}`;
 
   <!-- ── CTA ───────────────────────────────────────────────────────────────── -->
   <section class="py-12">
-    <div class="mx-auto max-w-3xl px-4 text-center">
+    <div class="mx-auto max-w-6xl px-4 text-center">
       <h2 class="text-xl font-bold tracking-tight">Ready to start?</h2>
       <p class="mt-2 text-muted">Browse the portfolio first, or reach out directly.</p>
       <div class="mt-6 flex flex-wrap justify-center gap-3">

@@ -10,13 +10,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <!-- ── Page Hero ── wood bg ─────────────────────────────────────────────── -->
   <section class="relative overflow-hidden py-16">
     <div
-      class="absolute inset-0 bg-cover bg-center pointer-events-none"
-      style="background-image: url('/images/backgrounds/background-1_large.jpg');"
+      class="absolute inset-0 pointer-events-none"
+      style="background-image: url('/images/backgrounds/background-1_large.jpg'); background-size: cover; background-position: center;"
     ></div>
     <div class="absolute inset-0 bg-zinc-900/65 pointer-events-none"></div>
 
-    <div class="relative mx-auto max-w-3xl px-4">
-      <p class="text-xs font-semibold uppercase tracking-widest text-secondary">About</p>
+    <div class="relative mx-auto max-w-6xl px-4">
+      <span class="inline-block rounded-full bg-black/50 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-secondary ring-1 ring-inset ring-secondary">About</span>
       <h1 class="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">
         Timber and Tides Woodcraft
       </h1>
@@ -29,7 +29,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   <!-- ── About the Maker ── dark bg ──────────────────────────────────────── -->
   <section class="py-12">
-    <div class="mx-auto max-w-3xl px-4">
+    <div class="mx-auto max-w-6xl px-4">
       <h2 class="text-2xl font-bold tracking-tight">The Maker</h2>
       <div class="mt-4 space-y-4 text-muted leading-relaxed">
         <p>
@@ -53,7 +53,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   <!-- ── The Process ── surface bg ───────────────────────────────────────── -->
   <section class="bg-surface py-12">
-    <div class="mx-auto max-w-3xl px-4">
+    <div class="mx-auto max-w-6xl px-4">
       <h2 class="text-2xl font-bold tracking-tight">The Process</h2>
       <p class="mt-2 text-muted">
         Placeholder: briefly describe how a commission works from first contact to delivery.
@@ -106,7 +106,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   <!-- ── Materials ── dark bg ─────────────────────────────────────────────── -->
   <section class="py-12">
-    <div class="mx-auto max-w-3xl px-4">
+    <div class="mx-auto max-w-6xl px-4">
       <h2 class="text-2xl font-bold tracking-tight">Materials &amp; Finishes</h2>
       <p class="mt-4 text-muted leading-relaxed">
         Placeholder: share your preferred wood species and why you like them — grain
@@ -127,7 +127,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   <!-- ── CTA ── surface bg ─────────────────────────────────────────────────── -->
   <section class="bg-surface py-12">
-    <div class="mx-auto max-w-3xl px-4 text-center">
+    <div class="mx-auto max-w-6xl px-4 text-center">
       <h2 class="text-xl font-bold">Ready to start a project?</h2>
       <p class="mt-2 text-muted">
         Reach out with your idea and I'll get back to you with questions and a rough estimate.

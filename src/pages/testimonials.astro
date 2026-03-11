@@ -14,13 +14,13 @@ const testimonials = (await getCollection("testimonials")).sort((a, b) => {
   <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
   <section class="relative overflow-hidden py-16">
     <div
-      class="absolute inset-0 bg-cover bg-center pointer-events-none"
-      style="background-image: url('/images/backgrounds/background-1_large.jpg');"
+      class="absolute inset-0 pointer-events-none"
+      style="background-image: url('/images/backgrounds/background-5_large.jpg'); background-size: cover; background-position: center;"
     ></div>
     <div class="absolute inset-0 bg-zinc-900/65 pointer-events-none"></div>
 
     <div class="relative mx-auto max-w-6xl px-4">
-      <p class="text-xs font-semibold uppercase tracking-widest text-accent">From Clients</p>
+      <span class="inline-block rounded-full bg-black/50 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-accent ring-1 ring-inset ring-accent">From Clients</span>
       <h1 class="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Feedback</h1>
       <p class="mt-4 text-lg text-fg leading-relaxed max-w-2xl">
         A few notes from clients and recipients on finished pieces.
@@ -30,7 +30,7 @@ const testimonials = (await getCollection("testimonials")).sort((a, b) => {
 
   <!-- ── Testimonials ───────────────────────────────────────────────────────── -->
   <section class="py-12">
-    <div class="mx-auto max-w-4xl px-4">
+    <div class="mx-auto max-w-6xl px-4">
       <div class="grid gap-6">
         {testimonials.map(async (t) => {
           const { Content } = await t.render();

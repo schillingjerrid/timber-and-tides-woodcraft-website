@@ -13,13 +13,13 @@ const plans = (await getCollection("plans")).sort(
   <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
   <section class="relative overflow-hidden py-16">
     <div
-      class="absolute inset-0 bg-cover bg-center pointer-events-none"
-      style="background-image: url('/images/backgrounds/background-3_large.jpg');"
+      class="absolute inset-0 pointer-events-none"
+      style="background-image: url('/images/backgrounds/background-3_large.jpg'); background-size: cover; background-position: center;"
     ></div>
     <div class="absolute inset-0 bg-zinc-900/65 pointer-events-none"></div>
 
     <div class="relative mx-auto max-w-6xl px-4">
-      <p class="text-xs font-semibold uppercase tracking-widest text-secondary">Free Downloads</p>
+      <span class="inline-block rounded-full bg-black/50 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-secondary ring-1 ring-inset ring-secondary">Free Downloads</span>
       <h1 class="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Plans</h1>
       <p class="mt-4 text-lg text-fg leading-relaxed max-w-2xl">
         Free downloadable plans and cut lists for builds from the shop. More plans coming soon.
