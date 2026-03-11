@@ -20,7 +20,7 @@ Node.js version is pinned to 24.12.0 via Volta (`package.json`).
 ## Local Server
 
 - **Always serve on localhost** — never screenshot a `file:///` URL.
-- Start the dev server: `npm run dev` (serves the project root at `http://localhost:4321`)
+- Start the dev server: `npm run dev` (this serves the project root at `http://localhost:4321`)
 - If the server is already running, do not start a second instance.
 
 ## Browser Automation & Visual Verification

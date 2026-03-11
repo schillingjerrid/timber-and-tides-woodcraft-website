@@ -40,6 +40,7 @@ const {
         <nav class="hidden items-center gap-6 text-sm text-muted md:flex">
           <a class="transition hover:text-fg" href="/projects/">Projects</a>
           <a class="transition hover:text-fg" href="/testimonials/">Feedback</a>
+          <a class="transition hover:text-fg" href="/about/">About</a>
           <a class="transition hover:text-fg" href="/contact/">Contact</a>
         </nav>
 
@@ -98,6 +99,11 @@ const {
           >Feedback</a>
           <a
             class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
+            href="/about/"
+            data-mobile-nav-link
+          >About</a>
+          <a
+            class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
             href="/contact/"
             data-mobile-nav-link
           >Contact</a>
@@ -112,7 +118,7 @@ const {
     <footer class="border-t border-border py-8 text-sm text-zinc-400">
       <div class="mx-auto flex max-w-6xl flex-col gap-2 px-4 sm:flex-row sm:items-center sm:justify-between">
         <p>&copy; {new Date().getFullYear()} Timber and Tides Woodcraft</p>
-        <p class="text-zinc-500">Made in Colorado • Commissions welcome</p>
+        <p class="text-zinc-400">Made in Colorado • Commissions welcome</p>
       </div>
     </footer>
 

@@ -1,0 +1,152 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="About — Timber and Tides Woodcraft"
+  description="Learn about the maker behind Timber and Tides Woodcraft, a one-person woodworking shop based in Colorado."
+>
+
+  <!-- ── Page Hero ── wood bg ─────────────────────────────────────────────── -->
+  <section class="relative overflow-hidden py-16">
+    <div
+      class="absolute inset-0 bg-cover bg-center pointer-events-none"
+      style="background-image: url('/images/backgrounds/background-1_large.jpg');"
+    ></div>
+    <div class="absolute inset-0 bg-zinc-900/65 pointer-events-none"></div>
+
+    <div class="relative mx-auto max-w-3xl px-4">
+      <p class="text-xs font-semibold uppercase tracking-widest text-secondary">About</p>
+      <h1 class="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">
+        Timber and Tides Woodcraft
+      </h1>
+      <p class="mt-4 text-lg text-fg leading-relaxed">
+        A small one-person shop in Colorado building custom furniture, gifts, and
+        functional pieces — one board at a time.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── About the Maker ── dark bg ──────────────────────────────────────── -->
+  <section class="py-12">
+    <div class="mx-auto max-w-3xl px-4">
+      <h2 class="text-2xl font-bold tracking-tight">The Maker</h2>
+      <div class="mt-4 space-y-4 text-muted leading-relaxed">
+        <p>
+          Placeholder: share a bit about yourself here — how you got into woodworking,
+          how long you've been at it, and what drives your craft. A personal story
+          goes a long way toward building trust with potential clients.
+        </p>
+        <p>
+          Placeholder: mention your background, influences, or the kinds of projects
+          that excite you most. Do you specialize in furniture? Cutting boards and
+          kitchen pieces? Decorative gifts? Let people know what to expect.
+        </p>
+        <p>
+          Placeholder: include something about your shop setup, tools, or philosophy
+          around sustainable wood sourcing. Clients who care about quality love knowing
+          the details behind the work.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── The Process ── surface bg ───────────────────────────────────────── -->
+  <section class="bg-surface py-12">
+    <div class="mx-auto max-w-3xl px-4">
+      <h2 class="text-2xl font-bold tracking-tight">The Process</h2>
+      <p class="mt-2 text-muted">
+        Placeholder: briefly describe how a commission works from first contact to delivery.
+      </p>
+
+      <ol class="mt-6 space-y-6">
+        <li class="flex gap-4">
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/20 text-sm font-bold text-primary">1</span>
+          <div>
+            <h3 class="font-semibold">Reach out</h3>
+            <p class="mt-1 text-sm text-muted">
+              Placeholder: describe what info you need from a new client — project idea,
+              dimensions, wood preference, timeline, and budget range.
+            </p>
+          </div>
+        </li>
+        <li class="flex gap-4">
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/20 text-sm font-bold text-primary">2</span>
+          <div>
+            <h3 class="font-semibold">Design &amp; estimate</h3>
+            <p class="mt-1 text-sm text-muted">
+              Placeholder: explain your quoting process — sketches, material selection,
+              lead time estimates, and how you handle design revisions.
+            </p>
+          </div>
+        </li>
+        <li class="flex gap-4">
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/20 text-sm font-bold text-primary">3</span>
+          <div>
+            <h3 class="font-semibold">Build</h3>
+            <p class="mt-1 text-sm text-muted">
+              Placeholder: describe your build process and how you keep clients updated
+              with progress photos or check-ins during the build.
+            </p>
+          </div>
+        </li>
+        <li class="flex gap-4">
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/20 text-sm font-bold text-primary">4</span>
+          <div>
+            <h3 class="font-semibold">Delivery</h3>
+            <p class="mt-1 text-sm text-muted">
+              Placeholder: explain delivery or pickup options, how you package pieces,
+              and any care instructions you send along with a finished project.
+            </p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ── Materials ── dark bg ─────────────────────────────────────────────── -->
+  <section class="py-12">
+    <div class="mx-auto max-w-3xl px-4">
+      <h2 class="text-2xl font-bold tracking-tight">Materials &amp; Finishes</h2>
+      <p class="mt-4 text-muted leading-relaxed">
+        Placeholder: share your preferred wood species and why you like them — grain
+        patterns, workability, availability in your area. Mention any go-to finishes
+        (oil, hardwax, lacquer, etc.) and how you choose them for different applications.
+      </p>
+
+      <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {["Black Walnut", "Hard Maple", "White Oak", "Cherry", "Ash", "Douglas Fir"].map((wood) => (
+          <div class="rounded-xl border border-border bg-surface px-4 py-3 text-sm">
+            <p class="font-medium text-fg">{wood}</p>
+            <p class="mt-0.5 text-xs text-muted">Placeholder species note</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ── surface bg ─────────────────────────────────────────────────── -->
+  <section class="bg-surface py-12">
+    <div class="mx-auto max-w-3xl px-4 text-center">
+      <h2 class="text-xl font-bold">Ready to start a project?</h2>
+      <p class="mt-2 text-muted">
+        Reach out with your idea and I'll get back to you with questions and a rough estimate.
+      </p>
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        <a
+          href="/contact/"
+          class="inline-flex items-center rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-bg transition hover:brightness-110"
+        >
+          Request a Commission
+        </a>
+        <a
+          href="/projects/"
+          class="inline-flex items-center rounded-xl border border-border bg-surface-2 px-5 py-2.5 text-sm font-semibold text-fg transition hover:bg-surface"
+        >
+          Browse Projects
+        </a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
