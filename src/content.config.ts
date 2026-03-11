@@ -26,6 +26,7 @@ const testimonials = defineCollection({
     roleOrContext: z.string().optional(), // e.g. "Commission client", "Gift recipient"
     projectSlug: z.string().optional(),
     date: z.coerce.date().optional(),
+    images: z.array(z.string()).default([]),
   }),
 });
 

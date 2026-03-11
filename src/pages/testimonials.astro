@@ -27,6 +27,18 @@ const testimonials = (await getCollection("testimonials")).sort((a, b) => {
                 <Content />
               </div>
 
+              {t.data.images.length > 0 && (
+                <div class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                  {t.data.images.map((src) => (
+                    <img
+                      src={src}
+                      alt=""
+                      class="rounded-lg object-cover aspect-square w-full"
+                    />
+                  ))}
+                </div>
+              )}
+
               <div class="mt-4 text-sm text-zinc-300">
                 <span class="font-semibold text-zinc-100">{t.data.name}</span>
                 {t.data.roleOrContext && (
