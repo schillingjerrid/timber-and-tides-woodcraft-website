@@ -9,14 +9,28 @@ const plans = (await getCollection("plans")).sort(
 ---
 
 <BaseLayout title="Plans — Timber & Tides Woodcraft" description="Free downloadable woodworking plans and cut lists.">
-  <section class="py-8">
-    <div class="mx-auto max-w-6xl px-4">
-      <h1 class="text-3xl font-bold tracking-tight">Plans</h1>
-      <p class="mt-2 text-muted max-w-2xl">
-        Free downloadable plans and cut lists for builds from the shop. More coming soon.
-      </p>
 
-      <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
+  <section class="relative overflow-hidden py-16">
+    <div
+      class="absolute inset-0 bg-cover bg-center pointer-events-none"
+      style="background-image: url('/images/backgrounds/background-3_large.jpg');"
+    ></div>
+    <div class="absolute inset-0 bg-zinc-900/65 pointer-events-none"></div>
+
+    <div class="relative mx-auto max-w-6xl px-4">
+      <p class="text-xs font-semibold uppercase tracking-widest text-secondary">Free Downloads</p>
+      <h1 class="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Plans</h1>
+      <p class="mt-4 text-lg text-fg leading-relaxed max-w-2xl">
+        Free downloadable plans and cut lists for builds from the shop. More plans coming soon.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Plan Cards ─────────────────────────────────────────────────────────── -->
+  <section class="py-12">
+    <div class="mx-auto max-w-6xl px-4">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {plans.map((plan) => (
           <a
             href={`/plans/${plan.slug}/`}
@@ -52,22 +66,30 @@ const plans = (await getCollection("plans")).sort(
             </div>
 
             <div class="border-t border-border px-5 py-3">
-              <span class="text-xs font-semibold text-primary group-hover:text-fg transition">
+              <span class="text-xs font-semibold text-secondary group-hover:text-fg transition">
                 View plan & download →
               </span>
             </div>
           </a>
         ))}
       </div>
-
-      <div class="mt-10 rounded-2xl border border-border bg-surface px-6 py-6">
-        <p class="text-sm text-muted">
-          Don't see what you're looking for?
-          <a href="/contact/" class="ml-1 font-semibold text-fg hover:text-white transition">
-            Suggest a plan idea →
-          </a>
-        </p>
-      </div>
     </div>
   </section>
+
+  <!-- ── Coming Soon + Suggest ─────────────────────────────────────────────── -->
+  <section class="bg-surface py-12">
+    <div class="mx-auto max-w-6xl px-4 text-center">
+      <h2 class="text-xl font-bold tracking-tight">More plans coming soon</h2>
+      <p class="mt-2 text-muted">
+        New plans are added as builds are completed. Have a project you'd love to see a plan for?
+      </p>
+      <a
+        href="/contact/"
+        class="mt-6 inline-flex items-center rounded-xl border border-secondary/40 bg-surface-2 px-5 py-2.5 text-sm font-semibold text-secondary transition hover:border-secondary/70 hover:text-fg"
+      >
+        Suggest a plan idea →
+      </a>
+    </div>
+  </section>
+
 </BaseLayout>

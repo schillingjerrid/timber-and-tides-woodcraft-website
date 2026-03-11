@@ -10,25 +10,42 @@ const testimonials = (await getCollection("testimonials")).sort((a, b) => {
 ---
 
 <BaseLayout title="Feedback — Timber & Tides Woodcraft" description="Customer feedback and project accolades.">
-  <section class="py-8">
-    <div class="mx-auto max-w-6xl px-4">
-      <h1 class="text-3xl font-bold tracking-tight">Feedback</h1>
-      <p class="mt-2 text-muted max-w-2xl">
-        A few notes from clients and recipients.
-      </p>
 
-      <div class="mt-6 grid gap-4">
+  <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
+  <section class="relative overflow-hidden py-16">
+    <div
+      class="absolute inset-0 bg-cover bg-center pointer-events-none"
+      style="background-image: url('/images/backgrounds/background-1_large.jpg');"
+    ></div>
+    <div class="absolute inset-0 bg-zinc-900/65 pointer-events-none"></div>
+
+    <div class="relative mx-auto max-w-6xl px-4">
+      <p class="text-xs font-semibold uppercase tracking-widest text-accent">From Clients</p>
+      <h1 class="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Feedback</h1>
+      <p class="mt-4 text-lg text-fg leading-relaxed max-w-2xl">
+        A few notes from clients and recipients on finished pieces.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Testimonials ───────────────────────────────────────────────────────── -->
+  <section class="py-12">
+    <div class="mx-auto max-w-4xl px-4">
+      <div class="grid gap-6">
         {testimonials.map(async (t) => {
           const { Content } = await t.render();
 
           return (
-            <article class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-5">
-              <div class="text-zinc-100 text-base leading-relaxed">
+            <article class="rounded-2xl border border-border bg-surface p-6">
+              <!-- Quote mark accent -->
+              <p class="text-4xl font-serif leading-none text-accent/40 select-none" aria-hidden="true">"</p>
+
+              <div class="mt-2 text-fg text-base leading-relaxed">
                 <Content />
               </div>
 
               {t.data.images.length > 0 && (
-                <div class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                <div class="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
                   {t.data.images.map((src) => (
                     <img
                       src={src}
@@ -39,15 +56,17 @@ const testimonials = (await getCollection("testimonials")).sort((a, b) => {
                 </div>
               )}
 
-              <div class="mt-4 text-sm text-zinc-300">
-                <span class="font-semibold text-zinc-100">{t.data.name}</span>
+              <div class="mt-5 border-t border-border pt-4 text-sm">
+                <span class="font-semibold text-fg">{t.data.name}</span>
                 {t.data.roleOrContext && (
-                  <span class="text-zinc-400"> — {t.data.roleOrContext}</span>
+                  <span class="text-muted"> — {t.data.roleOrContext}</span>
                 )}
-
                 {t.data.projectSlug && (
-                  <div class="mt-1">
-                    <a class="text-zinc-200 hover:text-white" href={`/projects/${t.data.projectSlug}/`}>
+                  <div class="mt-1.5">
+                    <a
+                      class="text-accent hover:text-fg transition text-xs font-semibold"
+                      href={`/projects/${t.data.projectSlug}/`}
+                    >
                       View related project →
                     </a>
                   </div>
@@ -59,4 +78,19 @@ const testimonials = (await getCollection("testimonials")).sort((a, b) => {
       </div>
     </div>
   </section>
+
+  <!-- ── CTA ───────────────────────────────────────────────────────────────── -->
+  <section class="bg-surface py-12">
+    <div class="mx-auto max-w-6xl px-4 text-center">
+      <h2 class="text-xl font-bold tracking-tight">Want to commission a piece?</h2>
+      <p class="mt-2 text-muted">Reach out and let's talk about what you have in mind.</p>
+      <a
+        href="/contact/"
+        class="mt-6 inline-flex items-center rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-fg transition hover:brightness-110"
+      >
+        Get in Touch
+      </a>
+    </div>
+  </section>
+
 </BaseLayout>

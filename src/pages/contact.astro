@@ -6,31 +6,89 @@ const SUBJECT = "Commission Request";
 const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(SUBJECT)}`;
 ---
 
-<BaseLayout title="Contact — Woodshop" description="Request a commission via email.">
-  <section class="py-8">
-    <div class="mx-auto max-w-6xl px-4">
-      <h1 class="text-3xl font-bold tracking-tight">Contact</h1>
-      <p class="mt-2 text-muted max-w-2xl">
-        Want a custom piece? Email me with a quick description and I’ll get back to you with questions, timing, and an estimate.
+<BaseLayout title="Contact — Timber & Tides Woodcraft" description="Request a commission via email.">
+
+  <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
+  <section class="relative overflow-hidden py-16">
+    <div
+      class="absolute inset-0 bg-cover bg-center pointer-events-none"
+      style="background-image: url(‘/images/backgrounds/background-3_large.jpg’);"
+    ></div>
+    <div class="absolute inset-0 bg-zinc-900/65 pointer-events-none"></div>
+
+    <div class="relative mx-auto max-w-3xl px-4">
+      <p class="text-xs font-semibold uppercase tracking-widest text-primary">Get in Touch</p>
+      <h1 class="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Contact</h1>
+      <p class="mt-4 text-lg text-fg leading-relaxed">
+        Want a custom piece? Send me a note and I’ll get back to you with questions, timing, and an estimate.
       </p>
+    </div>
+  </section>
 
-      <div class="mt-6 rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6">
-        <p class="text-sm text-zinc-300">Email</p>
-        <a class="mt-1 block text-lg font-semibold text-white hover:underline" href={mailto}>
-          {EMAIL}
+  <!-- ── Email ──────────────────────────────────────────────────────────────── -->
+  <section class="py-12">
+    <div class="mx-auto max-w-3xl px-4">
+      <p class="text-xs font-semibold uppercase tracking-widest text-muted">Email</p>
+      <a class="mt-2 block text-2xl font-bold text-fg hover:text-white transition" href={mailto}>
+        {EMAIL}
+      </a>
+      <p class="mt-2 text-sm text-muted">I typically respond within a day or two.</p>
+    </div>
+  </section>
+
+  <!-- ── What to include ────────────────────────────────────────────────────── -->
+  <section class="bg-surface py-12">
+    <div class="mx-auto max-w-3xl px-4">
+      <h2 class="text-xl font-bold tracking-tight border-l-[3px] border-primary pl-3">
+        What to include
+      </h2>
+      <p class="mt-3 text-muted text-sm">
+        The more detail you share upfront, the faster I can put together an estimate.
+      </p>
+      <ul class="mt-5 space-y-3">
+        {[
+          ["What you want built", "A brief description or sketch — inspiration photos and links are welcome."],
+          ["Approximate dimensions", "Rough width, depth, and height if you have them in mind."],
+          ["Wood species + finish", "Cherry, walnut, maple, white oak — or just tell me the look you’re after."],
+          ["Deadline", "Let me know if there’s a date you’re working toward."],
+          ["Budget range", "Helps me propose options that fit what you have in mind."],
+        ].map(([label, detail]) => (
+          <li class="flex gap-4">
+            <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/20">
+              <svg class="h-3 w-3 text-primary" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </span>
+            <div>
+              <p class="text-sm font-semibold text-fg">{label}</p>
+              <p class="mt-0.5 text-sm text-muted">{detail}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── CTA ───────────────────────────────────────────────────────────────── -->
+  <section class="py-12">
+    <div class="mx-auto max-w-3xl px-4 text-center">
+      <h2 class="text-xl font-bold tracking-tight">Ready to start?</h2>
+      <p class="mt-2 text-muted">Browse the portfolio first, or reach out directly.</p>
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        <a
+          href={mailto}
+          class="inline-flex items-center rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-bg transition hover:brightness-110"
+        >
+          Send an Email
         </a>
-
-        <div class="mt-6">
-          <h2 class="text-base font-semibold">What to include</h2>
-          <ul class="mt-2 list-disc pl-5 text-sm text-zinc-300 space-y-1">
-            <li>What you want built + any inspiration photos/links</li>
-            <li>Approximate dimensions</li>
-            <li>Preferred wood species + finish (if you know)</li>
-            <li>Deadline (if any)</li>
-            <li>Budget range (helps me propose options)</li>
-          </ul>
-        </div>
+        <a
+          href="/projects/"
+          class="inline-flex items-center rounded-xl border border-border bg-surface-2 px-5 py-2.5 text-sm font-semibold text-fg transition hover:bg-surface"
+        >
+          Browse Projects
+        </a>
       </div>
     </div>
   </section>
+
 </BaseLayout>
