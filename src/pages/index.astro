@@ -287,19 +287,19 @@ const marqueeDuration = Math.round((repeatedSet.length * CARD_STRIDE_PX) / 80);
     animation-play-state: paused;
   }
 
-  /* Plans Coming Soon — subtle breathing glow */
+  /* Plans card — very soft breathing glow */
   @keyframes glow-breathe {
-    0%, 100% { box-shadow: 0 0 30px -8px rgba(139,162,194,0.15); }
-    50%       { box-shadow: 0 0 50px -4px rgba(139,162,194,0.28); }
+    0%, 100% { box-shadow: 0 0 18px -10px rgba(139,162,194,0.10); }
+    50%       { box-shadow: 0 0 28px -6px rgba(139,162,194,0.18); }
   }
 
   .plans-card {
-    animation: glow-breathe 4s ease-in-out infinite;
+    animation: glow-breathe 6s ease-in-out infinite;
   }
 
   /* Reduced-motion: static grid, hide duplicate set */
   @media (prefers-reduced-motion: reduce) {
-    .plans-card { animation: none; box-shadow: 0 0 30px -8px rgba(139,162,194,0.15); }
+    .plans-card { animation: none; box-shadow: 0 0 18px -10px rgba(139,162,194,0.10); }
 
     .marquee-track {
       animation: none;
