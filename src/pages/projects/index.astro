@@ -6,6 +6,9 @@ import { getCollection } from "astro:content";
 const projects = (await getCollection("projects")).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime()
 );
+
+const plans = await getCollection("plans");
+const slugsWithPlans = new Set(plans.map((p) => p.data.projectSlug).filter(Boolean));
 ---
 
 <BaseLayout title="Projects — Timber & Tides Woodcraft" description="Browse woodworking projects and case studies.">
@@ -38,6 +41,7 @@ const projects = (await getCollection("projects")).sort(
             excerpt={p.data.excerpt}
             coverImage={p.data.coverImage}
             tags={p.data.tags}
+            hasPlans={slugsWithPlans.has(p.slug)}
           />
         ))}
       </div>
