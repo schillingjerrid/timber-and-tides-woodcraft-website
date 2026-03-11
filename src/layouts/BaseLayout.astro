@@ -121,6 +121,18 @@ const {
       <slot />
     </main>
 
+    <!-- ── Back to top button ──────────────────────────────────────────────── -->
+    <button
+      id="back-to-top"
+      type="button"
+      aria-label="Back to top"
+      class="fixed bottom-6 right-6 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface text-muted shadow-lg transition-all duration-300 ease-in-out hover:border-zinc-600 hover:bg-surface-2 hover:text-fg opacity-0 translate-y-4 pointer-events-none"
+    >
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+      </svg>
+    </button>
+
     <footer class="border-t border-border py-8 text-sm text-zinc-400">
       <div class="mx-auto flex max-w-6xl flex-col gap-2 px-4 sm:flex-row sm:items-center sm:justify-between">
         <p>&copy; {new Date().getFullYear()} Timber and Tides Woodcraft</p>
@@ -182,11 +194,27 @@ const {
         if (e.key === "Escape" && navOpen) setNavOpen(false);
       });
 
-      // ── Scroll-hide / scroll-reveal ────────────────────────────────────────
+      // ── Scroll-hide / scroll-reveal + back-to-top ─────────────────────────
 
       const header = document.getElementById("site-header");
+      const backToTop = document.getElementById("back-to-top");
       let lastScrollY = window.scrollY;
       let ticking = false;
+
+      function setBackToTop(visible: boolean) {
+        if (!backToTop) return;
+        if (visible) {
+          backToTop.classList.remove("opacity-0", "translate-y-4", "pointer-events-none");
+          backToTop.classList.add("opacity-100", "translate-y-0", "pointer-events-auto");
+        } else {
+          backToTop.classList.add("opacity-0", "translate-y-4", "pointer-events-none");
+          backToTop.classList.remove("opacity-100", "translate-y-0", "pointer-events-auto");
+        }
+      }
+
+      backToTop?.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
 
       window.addEventListener(
         "scroll",
@@ -199,17 +227,20 @@ const {
             const delta = currentScrollY - lastScrollY;
 
             if (currentScrollY <= 0) {
-              // Always show at very top
+              // Always show header at very top
               header?.classList.remove("-translate-y-full");
             } else if (delta > 8) {
-              // Scrolling down — hide
+              // Scrolling down — hide header
               header?.classList.add("-translate-y-full");
               // Also close mobile nav if open
               if (navOpen) setNavOpen(false);
             } else if (delta < -8) {
-              // Scrolling up — reveal
+              // Scrolling up — reveal header
               header?.classList.remove("-translate-y-full");
             }
+
+            // Back-to-top: show after scrolling down 200px, hide at top
+            setBackToTop(currentScrollY > 200);
 
             lastScrollY = currentScrollY;
             ticking = false;
