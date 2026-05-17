@@ -114,4 +114,24 @@ const relatedPlan = allPlans.find((p) => p.data.projectSlug === slug);
   .project-content :global(li::marker) {
     color: #8ba2c2; /* --color-primary */
   }
+
+  /* Make links clearly clickable */
+  .project-content :global(a) {
+    color: #8ba2c2; /* --color-primary */
+    text-decoration: underline;
+    text-decoration-color: #8ba2c244;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s, color 0.2s;
+  }
+
+  .project-content :global(a:hover) {
+    color: #a3b8d4;
+    text-decoration-color: #8ba2c2;
+  }
+
+  .project-content :global(a::after) {
+    content: " ↗";
+    font-size: 0.75em;
+    opacity: 0.6;
+  }
 </style>
