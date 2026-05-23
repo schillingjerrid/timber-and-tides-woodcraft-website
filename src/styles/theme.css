@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+/* Tailwind v4 theme tokens (become usable as bg-*, text-*, border-*) */
+@theme {
+  /* Core dark UI */
+  --color-bg: #0b0b0c;        /* near-black */
+  --color-surface: #111214;   /* cards/nav */
+  --color-surface-2: #16181b; /* hover/raised */
+  --color-border: #23262b;
+
+  /* Text */
+  --color-fg: #f3f4f6;        /* near-white */
+  --color-muted: #b6bcc2;     /* lighter muted text */
+  --color-subtle: #8b8f92;    /* your gray */
+
+  /* Brand accents (your colors) */
+  --color-primary: #8ba2c2;   /* steel blue */
+  --color-secondary: #8e9d60; /* sage */
+  --color-accent: #994a4e;    /* warm redwood */
+  --color-deep: #420810;      /* deep wine */
+
+  /* Optional semantic */
+  --color-link: #8ba2c2;
+}
+
+/* Global base styling */
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+}

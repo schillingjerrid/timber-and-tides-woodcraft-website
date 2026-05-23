@@ -1,0 +1,99 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const testimonials = (await getCollection("testimonials")).sort((a, b) => {
+  const da = a.data.date?.getTime() ?? 0;
+  const db = b.data.date?.getTime() ?? 0;
+  return db - da;
+});
+---
+
+<BaseLayout
+  title="Client Feedback — Northern Colorado Custom Furniture Maker | Timber and Tides Woodcraft"
+  description="Notes from clients and recipients on finished custom pieces by Timber and Tides Woodcraft in Northern Colorado."
+>
+
+  <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
+  <section class="relative overflow-hidden py-16">
+    <div
+      class="absolute inset-0 pointer-events-none"
+      style="background-image: url('/images/backgrounds/background-5_large.jpg'); background-size: cover; background-position: center;"
+    ></div>
+    <div class="absolute inset-0 bg-zinc-900/65 pointer-events-none"></div>
+
+    <div class="relative mx-auto max-w-6xl px-4">
+      <span class="inline-block rounded-full bg-black/50 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-accent ring-1 ring-inset ring-accent">From Clients</span>
+      <h1 class="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Feedback</h1>
+      <p class="mt-4 text-lg text-fg leading-relaxed max-w-2xl">
+        A few notes from clients and recipients on finished pieces.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Testimonials ───────────────────────────────────────────────────────── -->
+  <section class="py-12">
+    <div class="mx-auto max-w-6xl px-4">
+      <div class="grid gap-6">
+        {testimonials.map(async (t) => {
+          const { Content } = await t.render();
+
+          return (
+            <article class="rounded-2xl border border-border bg-surface p-6">
+              <!-- Quote mark accent -->
+              <p class="text-4xl font-serif leading-none text-accent/40 select-none" aria-hidden="true">"</p>
+
+              <div class="mt-2 text-fg text-base leading-relaxed">
+                <Content />
+              </div>
+
+              {t.data.images.length > 0 && (
+                <div class="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                  {t.data.images.map((src, i) => (
+                    <img
+                      src={src}
+                      alt={`Custom woodworking piece for ${t.data.name}${t.data.images.length > 1 ? ` — photo ${i + 1}` : ""}`}
+                      class="rounded-lg object-cover aspect-square w-full"
+                    />
+                  ))}
+                </div>
+              )}
+
+              <div class="mt-5 border-t border-border pt-4 text-sm">
+                <span class="font-semibold text-fg">{t.data.name}</span>
+                {t.data.roleOrContext && (
+                  <span class="text-muted"> — {t.data.roleOrContext}</span>
+                )}
+                {t.data.projectSlug && (
+                  <div class="mt-1.5">
+                    <a
+                      class="text-accent hover:text-fg transition text-xs font-semibold"
+                      href={`/projects/${t.data.projectSlug}/`}
+                    >
+                      View related project →
+                    </a>
+                  </div>
+                )}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ───────────────────────────────────────────────────────────────── -->
+  <section class="bg-surface py-12">
+    <div class="mx-auto max-w-6xl px-4 text-center">
+      <h2 class="text-xl font-bold tracking-tight">Want to commission a piece?</h2>
+      <p class="mt-2 text-muted">Reach out and let's talk about what you have in mind.</p>
+      <a
+        href="/contact/"
+        class="mt-6 inline-flex items-center rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-fg transition hover:brightness-110"
+      >
+        Get in Touch
+      </a>
+    </div>
+  </section>
+
+</BaseLayout>

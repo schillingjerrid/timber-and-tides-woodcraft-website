@@ -1,0 +1,352 @@
+---
+import "../styles/theme.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  noindex?: boolean;
+}
+
+const {
+  title = "Timber and Tides Woodcraft — Custom Furniture & Woodworking in Northern Colorado",
+  description = "Custom furniture, cabinets, and handcrafted gifts built one piece at a time in Milliken, Colorado. Commissions welcome across Northern Colorado and the Denver metro.",
+  image = "/images/og-default.jpg",
+  type = "website",
+  noindex = false,
+} = Astro.props;
+
+const SITE_URL = "https://timberandtideswoodcraft.com";
+const SITE_NAME = "Timber and Tides Woodcraft";
+const canonical = new URL(Astro.url.pathname, SITE_URL).href;
+const ogImage = new URL(image, SITE_URL).href;
+
+const businessSchema = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "@id": `${SITE_URL}/#business`,
+  name: SITE_NAME,
+  alternateName: "Timber & Tides Woodcraft",
+  description:
+    "Custom furniture, cabinets, and handcrafted woodworking commissions built in Milliken, Colorado, serving Northern Colorado and the Denver metro.",
+  url: SITE_URL,
+  image: ogImage,
+  logo: `${SITE_URL}/images/logos/tatw-logo_filled.svg`,
+  email: "trevor.schilling@timberandtideswoodcraft.com",
+  priceRange: "$$",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Milliken",
+    addressRegion: "CO",
+    addressCountry: "US",
+  },
+  areaServed: [
+    { "@type": "City", name: "Milliken" },
+    { "@type": "City", name: "Greeley" },
+    { "@type": "City", name: "Loveland" },
+    { "@type": "City", name: "Fort Collins" },
+    { "@type": "City", name: "Windsor" },
+    { "@type": "City", name: "Longmont" },
+    { "@type": "City", name: "Boulder" },
+    { "@type": "City", name: "Denver" },
+    { "@type": "AdministrativeArea", name: "Northern Colorado" },
+  ],
+  knowsAbout: [
+    "Custom furniture",
+    "Cabinet making",
+    "Hardwood woodworking",
+    "Cutting boards",
+    "Bookcases",
+    "Built-ins",
+  ],
+  sameAs: ["https://www.instagram.com/timberandtideswoodcraft/"],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    <link rel="canonical" href={canonical} />
+
+    <meta name="theme-color" content="#0b0f0e" />
+    <meta name="geo.region" content="US-CO" />
+    <meta name="geo.placename" content="Milliken, Colorado" />
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Timber and Tides Woodcraft" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(businessSchema)}
+    />
+
+    <slot name="head" />
+  </head>
+
+  <body class="min-h-screen bg-bg text-fg">
+    <!-- Sticky header with scroll-hide behaviour -->
+    <header
+      id="site-header"
+      class="sticky top-0 z-50 border-b border-border bg-bg/95 backdrop-blur-sm transition-transform duration-300 ease-in-out"
+    >
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+        <!-- Logo -->
+        <a href="/" class="inline-flex shrink-0 items-center" aria-label="Timber and Tides Woodcraft home">
+          <img
+            src="/images/logos/tatw-logo_filled.svg"
+            alt="Timber and Tides Woodcraft"
+            class="h-10 w-auto lg:h-[4.5rem]"
+          />
+        </a>
+
+        <!-- Desktop nav -->
+        <nav class="hidden items-center gap-6 text-sm text-muted md:flex lg:gap-8 lg:text-base">
+          <a class="transition hover:text-fg" href="/projects/">Projects</a>
+          <a class="transition hover:text-fg" href="/plans/">Plans</a>
+          <a class="transition hover:text-fg" href="/testimonials/">Feedback</a>
+          <a class="transition hover:text-fg" href="/about/">About</a>
+          <a class="transition hover:text-fg" href="/contact/">Contact</a>
+        </nav>
+
+        <!-- Hamburger toggle (mobile/tablet only) -->
+        <button
+          id="nav-toggle"
+          class="inline-flex items-center justify-center rounded-md p-2 text-muted transition hover:text-fg md:hidden"
+          type="button"
+          aria-expanded="false"
+          aria-controls="mobile-nav"
+          aria-label="Toggle navigation"
+        >
+          <!-- Hamburger icon -->
+          <svg
+            id="icon-menu"
+            class="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <!-- Close (X) icon -->
+          <svg
+            id="icon-close"
+            class="hidden h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!--
+        Mobile/tablet dropdown nav.
+        Absolutely positioned below the sticky header so opening it does not
+        change the header's height (otherwise the scroll-hide handler reads
+        the layout shift as a scroll-down gesture and slams the menu closed).
+      -->
+      <div class="absolute inset-x-0 top-full overflow-hidden md:hidden" aria-hidden="true">
+        <div
+          id="mobile-nav"
+          class="-translate-y-full border-b border-border bg-bg/95 backdrop-blur-sm transition-transform duration-300 ease-in-out"
+        >
+          <nav class="flex flex-col gap-1 px-4 py-3">
+            <a
+              class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
+              href="/projects/"
+              data-mobile-nav-link
+            >Projects</a>
+            <a
+              class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
+              href="/plans/"
+              data-mobile-nav-link
+            >Plans</a>
+            <a
+              class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
+              href="/testimonials/"
+              data-mobile-nav-link
+            >Feedback</a>
+            <a
+              class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
+              href="/about/"
+              data-mobile-nav-link
+            >About</a>
+            <a
+              class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
+              href="/contact/"
+              data-mobile-nav-link
+            >Contact</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="pb-16">
+      <slot />
+    </main>
+
+    <!-- ── Back to top button ──────────────────────────────────────────────── -->
+    <button
+      id="back-to-top"
+      type="button"
+      aria-label="Back to top"
+      class="fixed bottom-6 right-6 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface text-muted shadow-lg transition-all duration-300 ease-in-out hover:border-zinc-600 hover:bg-surface-2 hover:text-fg opacity-0 translate-y-4 pointer-events-none"
+    >
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+      </svg>
+    </button>
+
+    <footer class="border-t border-border py-8 text-sm text-zinc-400">
+      <div class="mx-auto flex max-w-6xl flex-col gap-4 px-4 sm:flex-row sm:items-center sm:justify-between">
+        <p>&copy; {new Date().getFullYear()} Timber and Tides Woodcraft</p>
+
+        <div class="flex items-center gap-4">
+          <p class="text-zinc-400">Milliken, Colorado • Serving Northern Colorado • Commissions welcome</p>
+          <a
+            href="https://www.instagram.com/timberandtideswoodcraft/"
+            target="_blank"
+            aria-label="Timber and Tides Woodcraft on Instagram"
+            class="text-zinc-500 transition hover:text-fg"
+          >
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // ── Mobile nav toggle ──────────────────────────────────────────────────
+
+      const toggle = document.getElementById("nav-toggle");
+      const mobileNav = document.getElementById("mobile-nav");
+      const iconMenu = document.getElementById("icon-menu");
+      const iconClose = document.getElementById("icon-close");
+
+      let navOpen = false;
+
+      function setNavOpen(next: boolean) {
+        navOpen = next;
+        toggle?.setAttribute("aria-expanded", String(navOpen));
+
+        if (mobileNav) {
+          mobileNav.classList.toggle("-translate-y-full", !navOpen);
+          mobileNav.parentElement?.setAttribute("aria-hidden", String(!navOpen));
+        }
+
+        iconMenu?.classList.toggle("hidden", navOpen);
+        iconClose?.classList.toggle("hidden", !navOpen);
+      }
+
+      // Toggle on button click
+      toggle?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        setNavOpen(!navOpen);
+      });
+
+      // Close when a nav link is clicked
+      document.querySelectorAll("[data-mobile-nav-link]").forEach((link) => {
+        link.addEventListener("click", () => setNavOpen(false));
+      });
+
+      // Close when clicking outside the header
+      document.addEventListener("click", (e) => {
+        if (!navOpen) return;
+        const header = document.getElementById("site-header");
+        if (header && e.target instanceof Node && !header.contains(e.target)) {
+          setNavOpen(false);
+        }
+      });
+
+      // Close on Escape
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && navOpen) setNavOpen(false);
+      });
+
+      // ── Scroll-hide / scroll-reveal + back-to-top ─────────────────────────
+
+      const header = document.getElementById("site-header");
+      const backToTop = document.getElementById("back-to-top");
+      let lastScrollY = window.scrollY;
+      let ticking = false;
+
+      function setBackToTop(visible: boolean) {
+        if (!backToTop) return;
+        if (visible) {
+          backToTop.classList.remove("opacity-0", "translate-y-4", "pointer-events-none");
+          backToTop.classList.add("opacity-100", "translate-y-0", "pointer-events-auto");
+        } else {
+          backToTop.classList.add("opacity-0", "translate-y-4", "pointer-events-none");
+          backToTop.classList.remove("opacity-100", "translate-y-0", "pointer-events-auto");
+        }
+      }
+
+      backToTop?.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      window.addEventListener(
+        "scroll",
+        () => {
+          if (ticking) return;
+          ticking = true;
+
+          window.requestAnimationFrame(() => {
+            const currentScrollY = window.scrollY;
+            const delta = currentScrollY - lastScrollY;
+
+            if (currentScrollY <= 0) {
+              // Always show header at very top
+              header?.classList.remove("-translate-y-full");
+            } else if (delta > 8) {
+              // Scrolling down — hide header
+              header?.classList.add("-translate-y-full");
+              // Also close mobile nav if open
+              if (navOpen) setNavOpen(false);
+            } else if (delta < -8) {
+              // Scrolling up — reveal header
+              header?.classList.remove("-translate-y-full");
+            }
+
+            // Back-to-top: show after scrolling down 200px, hide at top
+            setBackToTop(currentScrollY > 200);
+
+            lastScrollY = currentScrollY;
+            ticking = false;
+          });
+        },
+        { passive: true }
+      );
+    </script>
+  </body>
+</html>

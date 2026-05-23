@@ -1,0 +1,188 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Gallery from "../../components/Gallery.astro";
+import TagPill from "../../components/TagPill.astro";
+import { Image } from "astro:assets";
+import { getCollection, getEntryBySlug } from "astro:content";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const project = await getEntryBySlug("projects", slug!);
+if (!project) throw new Error(`Project not found: ${slug}`);
+
+const { Content } = await project.render();
+const d = project.data;
+
+const allPlans = await getCollection("plans");
+const relatedPlan = allPlans.find((p) => p.data.projectSlug === slug);
+
+const SITE_URL = "https://timberandtideswoodcraft.com";
+const projectUrl = `${SITE_URL}/projects/${slug}/`;
+const projectImage = new URL(d.coverImage.src, SITE_URL).href;
+
+const projectSchema = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  name: d.title,
+  description: d.excerpt,
+  image: projectImage,
+  url: projectUrl,
+  dateCreated: d.date.toISOString().slice(0, 10),
+  creator: { "@id": `${SITE_URL}/#business` },
+  material: d.wood,
+  keywords: d.tags?.join(", "),
+  ...(d.dimensions ? { size: d.dimensions } : {}),
+};
+
+const pageTitle = `${d.title} — Custom Woodworking | Timber and Tides Woodcraft`;
+const pageDescription =
+  d.excerpt ??
+  `${d.title} — a custom woodworking project handcrafted by Timber and Tides Woodcraft in Northern Colorado.`;
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  image={d.coverImage.src}
+  type="article"
+>
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(projectSchema)}
+    slot="head"
+  />
+  <article class="py-8">
+    <div class="mx-auto max-w-6xl px-4">
+      <a href="/projects/" class="text-sm text-muted hover:text-fg transition">← Back to projects</a>
+
+      <h1 class="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{d.title}</h1>
+
+      <div class="mt-3 flex flex-wrap gap-2 text-sm text-muted">
+        <span>{d.date.toLocaleDateString()}</span>
+        {d.wood && <span>• Wood: {d.wood}</span>}
+        {d.finish && <span>• Finish: {d.finish}</span>}
+        {d.dimensions && <span>• Size: {d.dimensions}</span>}
+      </div>
+
+      <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
+        {d.tags?.length > 0 && (
+          <div class="flex flex-wrap gap-2">
+            {d.tags.map((t) => <TagPill tag={t} />)}
+          </div>
+        )}
+
+        {relatedPlan && (
+          <a
+            href={`/plans/${relatedPlan.slug}/`}
+            class="group inline-flex items-center gap-2 rounded-xl border border-secondary/40 bg-surface px-4 py-2 text-sm font-semibold text-secondary
+                   transition hover:border-secondary/70 hover:bg-surface-2 hover:text-fg"
+          >
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+            </svg>
+            View Plans
+          </a>
+        )}
+      </div>
+
+      <div class="mt-6 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900">
+        <Image
+          src={d.coverImage}
+          alt={`${d.title}${d.wood ? ` in ${d.wood}` : ""} — handcrafted by Timber and Tides Woodcraft in Northern Colorado`}
+          width={1600}
+          height={1000}
+          loading="eager"
+          class="h-full w-full object-cover"
+        />
+      </div>
+
+      <div class="project-content prose prose-invert mt-8 max-w-none prose-a:text-primary">
+        <Content />
+      </div>
+
+      <Gallery images={d.gallery} altPrefix={d.title} />
+    </div>
+  </article>
+
+  <script is:inline>
+    document.querySelectorAll('.project-content a[href^="http"]').forEach((a) => {
+      try {
+        if (new URL(a.href).host !== location.host) {
+          a.setAttribute('target', '_blank');
+        }
+      } catch {}
+    });
+  </script>
+</BaseLayout>
+
+<style>
+  /* Style h2 section headers with steel blue accent */
+  .project-content :global(h2) {
+    margin-top: 2.25rem;
+    margin-bottom: 0.75rem;
+    padding-left: 0.875rem;
+    border-left: 3px solid #8ba2c2; /* --color-primary / steel blue */
+    font-size: 1.0625rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #f3f4f6; /* --color-fg */
+    text-transform: none;
+  }
+
+  /* Thin rule above each h2 for section separation */
+  .project-content :global(h2:not(:first-child)) {
+    margin-top: 2.25rem;
+  }
+
+  .project-content :global(h2:not(:first-child)::before) {
+    content: "";
+    display: block;
+    margin-bottom: 0.75rem;
+    border-top: 1px solid #23262b; /* --color-border */
+  }
+
+  /* Body text */
+  .project-content :global(p) {
+    color: #b6bcc2; /* --color-muted */
+    line-height: 1.7;
+  }
+
+  /* Lists */
+  .project-content :global(ul) {
+    padding-left: 1.25rem;
+  }
+
+  .project-content :global(li) {
+    color: #b6bcc2;
+    margin-bottom: 0.4rem;
+    padding-left: 0.25rem;
+  }
+
+  .project-content :global(li::marker) {
+    color: #8ba2c2; /* --color-primary */
+  }
+
+  /* Make links clearly clickable */
+  .project-content :global(a) {
+    color: #8ba2c2; /* --color-primary */
+    text-decoration: underline;
+    text-decoration-color: #8ba2c244;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s, color 0.2s;
+  }
+
+  .project-content :global(a:hover) {
+    color: #a3b8d4;
+    text-decoration-color: #8ba2c2;
+  }
+
+  .project-content :global(a::after) {
+    content: " ↗";
+    font-size: 0.75em;
+    opacity: 0.6;
+  }
+</style>

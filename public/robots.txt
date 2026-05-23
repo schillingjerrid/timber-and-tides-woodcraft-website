@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://timberandtideswoodcraft.com/sitemap-index.xml

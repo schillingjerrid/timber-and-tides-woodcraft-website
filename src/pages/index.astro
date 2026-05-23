@@ -1,0 +1,388 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { getCollection } from "astro:content";
+
+const projects = await getCollection("projects");
+const plans = await getCollection("plans");
+
+const featured = projects
+  .filter((p) => p.data.featured)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 6);
+
+const recent = [...projects]
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+
+const testimonials = await getCollection("testimonials");
+---
+
+<BaseLayout
+  title="Timber and Tides Woodcraft — Custom Furniture & Woodworking in Northern Colorado"
+  description="Custom furniture, cabinets, and handcrafted gifts built one piece at a time in Milliken, Colorado. Browse the portfolio, read client feedback, and commission a piece across Northern Colorado."
+>
+
+  <!-- ── 1. Hero ── wood bg (background-3) ───────────────────────────────── -->
+  <section class="relative overflow-hidden bg-surface py-10">
+    <div
+      class="absolute inset-0 bg-cover bg-center pointer-events-none"
+      style="background-image: url('/images/backgrounds/background-3_large.jpg');"
+    ></div>
+    <!-- Overlay increased to /65 for legible text over any wood brightness -->
+    <div class="absolute inset-0 bg-zinc-900/65 pointer-events-none"></div>
+
+    <div class="relative mx-auto max-w-6xl px-4">
+      <h1 class="text-3xl sm:text-4xl font-bold tracking-tight">
+        Handcrafted woodworking, built to last.
+      </h1>
+      <p class="mt-3 max-w-2xl text-fg">
+        Custom furniture, cabinets, and thoughtful gifts ~ tables, shelves, and more ~
+        built one piece at a time from a small shop in Milliken, Colorado.
+        Commissions welcome across Northern Colorado and the Denver metro.
+      </p>
+
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a
+          href="/projects/"
+          class="group inline-flex items-center justify-center rounded-xl border border-secondary/60 bg-surface px-4 py-2 text-sm font-semibold text-fg
+                transition will-change-transform
+                hover:bg-surface-2 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/30
+                active:translate-y-0
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+        >
+          View Projects
+          <span class="ml-2 opacity-70 transition group-hover:opacity-100 group-hover:translate-x-0.5">→</span>
+        </a>
+
+        <a
+          href="/contact/"
+          class="group inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-bg
+                transition will-change-transform
+                hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/30 hover:brightness-110
+                active:translate-y-0
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+        >
+          Request a Commission
+          <span class="ml-2 opacity-80 transition group-hover:rotate-6 group-hover:scale-110">✦</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 2. Featured Projects ── plain dark bg ───────────────────────────── -->
+  <section class="mt-8">
+    <div class="mx-auto max-w-6xl px-4">
+      <div class="flex items-end justify-between gap-4">
+        <h2 class="text-xl font-semibold">Featured Projects</h2>
+        <a class="text-primary hover:text-fg transition" href="/projects/">See all →</a>
+      </div>
+
+      {featured.length === 0 ? (
+        <p class="mt-4 text-muted">
+          Add a project in <code class="text-fg">src/content/projects</code> to get started.
+        </p>
+      ) : (
+        <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((p) => (
+            <ProjectCard
+              href={`/projects/${p.slug}/`}
+              title={p.data.title}
+              excerpt={p.data.excerpt}
+              coverImage={p.data.coverImage}
+              tags={p.data.tags}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- ── 3. Testimonials Marquee ── wood bg (background-2) ──────────────── -->
+  {testimonials.length > 0 && (
+    <section
+      class="relative mt-10 overflow-hidden py-14"
+      aria-label="Customer testimonials"
+    >
+      <div
+        class="absolute inset-0 bg-cover bg-center pointer-events-none"
+        style="background-image: url('/images/backgrounds/background-2_large.jpg');"
+      ></div>
+      <div class="absolute inset-0 bg-zinc-900/65 pointer-events-none"></div>
+
+      <div class="relative">
+        <h2 class="mb-8 text-center text-xl font-semibold">What Clients Say</h2>
+
+        <!--
+          Default rendering shows the unique testimonials once, centered and wrapped
+          if necessary. A client-side script measures whether the natural row width
+          exceeds the viewport; if so it clones cards to fill the marquee track and
+          enables the scrolling animation. Otherwise the cards stay stationary.
+        -->
+        <div class="group overflow-hidden" role="marquee" data-testimonials-viewport>
+          <div
+            class="marquee-track marquee-static flex"
+            data-testimonials-track
+          >
+            {testimonials.map((t) => (
+              <article
+                class="mr-6 w-72 shrink-0 rounded-2xl border border-border bg-surface/80 backdrop-blur-sm px-6 py-5"
+                data-testimonial-card
+              >
+                <p class="text-sm leading-relaxed text-fg">"{t.body.trim()}"</p>
+                <footer class="mt-4">
+                  <p class="text-sm font-semibold text-primary">{t.data.name}</p>
+                  {t.data.roleOrContext && (
+                    <p class="text-xs text-muted">{t.data.roleOrContext}</p>
+                  )}
+                </footer>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <div class="mt-8 text-center">
+          <a
+            href="/testimonials/"
+            class="text-sm text-primary hover:text-fg transition"
+          >Read all feedback →</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ── 4. Recent Work ── plain dark bg ─────────────────────────────────── -->
+  {recent.length > 0 && (
+    <section class="mt-10">
+      <div class="mx-auto max-w-6xl px-4">
+        <div class="flex items-end justify-between gap-4">
+          <h2 class="text-xl font-semibold">Recent Work</h2>
+          <a class="text-primary hover:text-fg transition" href="/projects/">See all →</a>
+        </div>
+
+        <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {recent.map((p) => (
+            <ProjectCard
+              href={`/projects/${p.slug}/`}
+              title={p.data.title}
+              excerpt={p.data.excerpt}
+              coverImage={p.data.coverImage}
+              tags={p.data.tags}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ── 5. About Teaser ── wood bg (background-1) ───────────────────────── -->
+  <section class="relative mt-10 overflow-hidden">
+    <div
+      class="absolute inset-0 bg-cover bg-center pointer-events-none"
+      style="background-image: url('/images/backgrounds/background-1_large.jpg');"
+    ></div>
+    <div class="absolute inset-0 bg-zinc-900/65 pointer-events-none"></div>
+
+    <div class="relative mx-auto max-w-6xl px-4 py-12">
+      <p class="text-xs font-semibold uppercase tracking-widest text-secondary">About the Shop</p>
+      <h2 class="mt-2 text-2xl font-bold tracking-tight">Small shop. Serious craft.</h2>
+      <p class="mt-4 max-w-2xl text-fg">
+        Timber and Tides Woodcraft is a one-person shop based in Milliken, in Northern
+        Colorado, building custom furniture, kitchen pieces, and gifts from the ground
+        up. Every project starts with carefully selected lumber and ends with a piece
+        meant to outlast trends.
+      </p>
+      <div class="mt-6 flex flex-wrap items-center gap-5">
+        <a
+          href="/about/"
+          class="group inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-fg transition"
+        >
+          Learn more about the shop
+          <span class="transition group-hover:translate-x-0.5">→</span>
+        </a>
+
+        <a
+          href="https://www.instagram.com/timberandtideswoodcraft/"
+          target="_blank"
+          class="group inline-flex items-center gap-2 text-sm font-semibold text-zinc-400 hover:text-fg transition"
+        >
+          <svg class="h-4 w-4 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+          </svg>
+          Follow on Instagram
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 6. Plans ── card with glow ─────────────────────────────────────── -->
+  <section class="mt-10">
+    <div class="mx-auto max-w-6xl px-4">
+      <div class="plans-card rounded-2xl border border-border bg-surface px-8 py-8">
+        <h2 class="text-lg font-semibold">Free Woodworking Plans</h2>
+        <p class="mt-2 max-w-xl text-muted">
+          {plans.length === 1 ? "1 plan available now" : `${plans.length} plans available`} — more coming soon.
+          Download cut lists and dimensioned drawings for builds from the shop.
+        </p>
+        <div class="mt-5 flex flex-wrap gap-3">
+          <a
+            href="/plans/"
+            class="group inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-bg
+                  transition will-change-transform
+                  hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/30 hover:brightness-110
+                  active:translate-y-0
+                  focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+          >
+            Browse Plans
+            <span class="ml-2 opacity-80 transition group-hover:translate-x-0.5">→</span>
+          </a>
+          <a
+            href="/contact/"
+            class="inline-flex items-center justify-center rounded-xl border border-border bg-surface-2 px-4 py-2 text-sm font-semibold text-fg hover:bg-surface transition"
+          >
+            Suggest a plan idea
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* Animated marquee — duration is set inline by the client script */
+  .marquee-track.marquee-animated {
+    animation: marquee-scroll linear infinite;
+  }
+
+  /* Static centered layout for the "fits in viewport" case (also the SSR default
+     so no-JS users still see the testimonials laid out sensibly). */
+  .marquee-track.marquee-static {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  /* In static mode we use `gap` instead of the per-card `mr-6`, so suppress
+     the trailing margin to keep the group symmetrically centered. */
+  .marquee-track.marquee-static > [data-testimonial-card] {
+    margin-right: 0;
+  }
+
+  /* Pause animation on hover */
+  .group:hover .marquee-track.marquee-animated {
+    animation-play-state: paused;
+  }
+
+  /* Plans card — very soft breathing glow */
+  @keyframes glow-breathe {
+    0%, 100% { box-shadow: 0 0 18px -10px rgba(139,162,194,0.10); }
+    50%       { box-shadow: 0 0 28px -6px rgba(139,162,194,0.18); }
+  }
+
+  .plans-card {
+    animation: glow-breathe 6s ease-in-out infinite;
+  }
+
+  /* Reduced-motion: never animate; hide any aria-hidden clones the script added. */
+  @media (prefers-reduced-motion: reduce) {
+    .plans-card { animation: none; box-shadow: 0 0 18px -10px rgba(139,162,194,0.10); }
+
+    .marquee-track.marquee-animated {
+      animation: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .marquee-track [aria-hidden="true"] {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Decide between a stationary centered layout and the scrolling marquee
+  // based on whether the unique testimonials actually overflow the viewport.
+  const CARD_STRIDE_PX = 312;       // w-72 (288) + mr-6 (24)
+  const STATIC_GAP_PX = 24;         // matches `gap: 1.5rem` in .marquee-static
+  const TARGET_SPEED_PX_PER_SEC = 80;
+  const MIN_CARDS_PER_HALF = 12;
+
+  function setupTestimonialsMarquee() {
+    const viewport = document.querySelector<HTMLElement>("[data-testimonials-viewport]");
+    const track = document.querySelector<HTMLElement>("[data-testimonials-track]");
+    if (!viewport || !track) return;
+
+    // Remove any clones from a previous run (e.g. after resize).
+    Array.from(track.children).forEach((el) => {
+      if ((el as HTMLElement).hasAttribute("data-marquee-clone")) el.remove();
+    });
+
+    // Reset to the static SSR baseline before re-measuring.
+    track.classList.remove("marquee-animated");
+    track.classList.add("marquee-static");
+    track.style.removeProperty("animation-duration");
+
+    const originals = Array.from(track.children).filter((el) =>
+      (el as HTMLElement).hasAttribute("data-testimonial-card")
+    ) as HTMLElement[];
+    if (originals.length === 0) return;
+
+    // Sum the natural card widths plus the gaps between them.
+    let cardsWidth = 0;
+    for (const card of originals) cardsWidth += card.getBoundingClientRect().width;
+    if (originals.length > 1) cardsWidth += (originals.length - 1) * STATIC_GAP_PX;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const fits = cardsWidth <= viewport.clientWidth;
+
+    if (fits || prefersReducedMotion) return; // keep the static layout
+
+    // Promote to the scrolling marquee: clone enough cards to fill at least
+    // MIN_CARDS_PER_HALF per half, then duplicate the whole half (aria-hidden)
+    // so translateX(-50%) loops seamlessly.
+    track.classList.remove("marquee-static");
+
+    const repeatCount = Math.max(1, Math.ceil(MIN_CARDS_PER_HALF / originals.length));
+    for (let i = 1; i < repeatCount; i++) {
+      for (const card of originals) {
+        const clone = card.cloneNode(true) as HTMLElement;
+        clone.setAttribute("data-marquee-clone", "");
+        track.appendChild(clone);
+      }
+    }
+
+    const firstHalf = Array.from(track.children) as HTMLElement[];
+    for (const card of firstHalf) {
+      const clone = card.cloneNode(true) as HTMLElement;
+      clone.setAttribute("aria-hidden", "true");
+      clone.setAttribute("data-marquee-clone", "");
+      track.appendChild(clone);
+    }
+
+    const duration = Math.round((firstHalf.length * CARD_STRIDE_PX) / TARGET_SPEED_PX_PER_SEC);
+    track.style.animationDuration = `${duration}s`;
+    track.classList.add("marquee-animated");
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupTestimonialsMarquee);
+  } else {
+    setupTestimonialsMarquee();
+  }
+
+  let resizeTimer: number | undefined;
+  window.addEventListener("resize", () => {
+    if (resizeTimer !== undefined) window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(setupTestimonialsMarquee, 150);
+  });
+
+  window
+    .matchMedia("(prefers-reduced-motion: reduce)")
+    .addEventListener("change", setupTestimonialsMarquee);
+</script>
