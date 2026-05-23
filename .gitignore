@@ -2,6 +2,10 @@
 dist/
 # generated types
 .astro/
+.playwright-mcp/
+
+# testing screenshots
+screenshots/
 
 # dependencies
 node_modules/

@@ -16,16 +16,6 @@ const recent = [...projects]
   .slice(0, 3);
 
 const testimonials = await getCollection("testimonials");
-
-// Repeat testimonials enough so each half of the marquee track fills any viewport.
-// Each card is w-72 (288px) + mr-6 right margin (24px) = 312px stride.
-// Target ≥12 cards per half so the loop has ample fill at any screen width.
-const MIN_CARDS_PER_SET = 12;
-const repeatCount = Math.max(1, Math.ceil(MIN_CARDS_PER_SET / Math.max(1, testimonials.length)));
-const repeatedSet = Array.from({ length: repeatCount }, () => testimonials).flat();
-// Duration keeps scroll speed ≈ 80 px/s regardless of repeat count
-const CARD_STRIDE_PX = 312;
-const marqueeDuration = Math.round((repeatedSet.length * CARD_STRIDE_PX) / 80);
 ---
 
 <BaseLayout
@@ -123,33 +113,20 @@ const marqueeDuration = Math.round((repeatedSet.length * CARD_STRIDE_PX) / 80);
         <h2 class="mb-8 text-center text-xl font-semibold">What Clients Say</h2>
 
         <!--
-          Marquee: each card gets mr-6 (24px) instead of gap on the flex container.
-          This means every card — including the last in each half — adds the same
-          trailing space, so translateX(-50%) lands exactly at the start of the
-          second half and the loop is seamless.
+          Default rendering shows the unique testimonials once, centered and wrapped
+          if necessary. A client-side script measures whether the natural row width
+          exceeds the viewport; if so it clones cards to fill the marquee track and
+          enables the scrolling animation. Otherwise the cards stay stationary.
         -->
-        <div class="group overflow-hidden" role="marquee">
+        <div class="group overflow-hidden" role="marquee" data-testimonials-viewport>
           <div
-            class="marquee-track flex"
-            style={`animation-duration: ${marqueeDuration}s`}
+            class="marquee-track marquee-static flex"
+            data-testimonials-track
           >
-            {/* First half — visible to screen readers */}
-            {repeatedSet.map((t) => (
-              <article class="mr-6 w-72 shrink-0 rounded-2xl border border-border bg-surface/80 backdrop-blur-sm px-6 py-5">
-                <p class="text-sm leading-relaxed text-fg">"{t.body.trim()}"</p>
-                <footer class="mt-4">
-                  <p class="text-sm font-semibold text-primary">{t.data.name}</p>
-                  {t.data.roleOrContext && (
-                    <p class="text-xs text-muted">{t.data.roleOrContext}</p>
-                  )}
-                </footer>
-              </article>
-            ))}
-            {/* Second half — aria-hidden duplicate for seamless loop */}
-            {repeatedSet.map((t) => (
+            {testimonials.map((t) => (
               <article
                 class="mr-6 w-72 shrink-0 rounded-2xl border border-border bg-surface/80 backdrop-blur-sm px-6 py-5"
-                aria-hidden="true"
+                data-testimonial-card
               >
                 <p class="text-sm leading-relaxed text-fg">"{t.body.trim()}"</p>
                 <footer class="mt-4">
@@ -277,13 +254,26 @@ const marqueeDuration = Math.round((repeatedSet.length * CARD_STRIDE_PX) / 80);
     to   { transform: translateX(-50%); }
   }
 
-  .marquee-track {
-    /* duration is set via inline style so it scales with card count */
+  /* Animated marquee — duration is set inline by the client script */
+  .marquee-track.marquee-animated {
     animation: marquee-scroll linear infinite;
   }
 
-  /* Pause on hover */
-  .group:hover .marquee-track {
+  /* Static centered layout for the "fits in viewport" case (also the SSR default
+     so no-JS users still see the testimonials laid out sensibly). */
+  .marquee-track.marquee-static {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  /* In static mode we use `gap` instead of the per-card `mr-6`, so suppress
+     the trailing margin to keep the group symmetrically centered. */
+  .marquee-track.marquee-static > [data-testimonial-card] {
+    margin-right: 0;
+  }
+
+  /* Pause animation on hover */
+  .group:hover .marquee-track.marquee-animated {
     animation-play-state: paused;
   }
 
@@ -297,11 +287,11 @@ const marqueeDuration = Math.round((repeatedSet.length * CARD_STRIDE_PX) / 80);
     animation: glow-breathe 6s ease-in-out infinite;
   }
 
-  /* Reduced-motion: static grid, hide duplicate set */
+  /* Reduced-motion: never animate; hide any aria-hidden clones the script added. */
   @media (prefers-reduced-motion: reduce) {
     .plans-card { animation: none; box-shadow: 0 0 18px -10px rgba(139,162,194,0.10); }
 
-    .marquee-track {
+    .marquee-track.marquee-animated {
       animation: none;
       flex-wrap: wrap;
       justify-content: center;
@@ -313,3 +303,85 @@ const marqueeDuration = Math.round((repeatedSet.length * CARD_STRIDE_PX) / 80);
     }
   }
 </style>
+
+<script>
+  // Decide between a stationary centered layout and the scrolling marquee
+  // based on whether the unique testimonials actually overflow the viewport.
+  const CARD_STRIDE_PX = 312;       // w-72 (288) + mr-6 (24)
+  const STATIC_GAP_PX = 24;         // matches `gap: 1.5rem` in .marquee-static
+  const TARGET_SPEED_PX_PER_SEC = 80;
+  const MIN_CARDS_PER_HALF = 12;
+
+  function setupTestimonialsMarquee() {
+    const viewport = document.querySelector<HTMLElement>("[data-testimonials-viewport]");
+    const track = document.querySelector<HTMLElement>("[data-testimonials-track]");
+    if (!viewport || !track) return;
+
+    // Remove any clones from a previous run (e.g. after resize).
+    Array.from(track.children).forEach((el) => {
+      if ((el as HTMLElement).hasAttribute("data-marquee-clone")) el.remove();
+    });
+
+    // Reset to the static SSR baseline before re-measuring.
+    track.classList.remove("marquee-animated");
+    track.classList.add("marquee-static");
+    track.style.removeProperty("animation-duration");
+
+    const originals = Array.from(track.children).filter((el) =>
+      (el as HTMLElement).hasAttribute("data-testimonial-card")
+    ) as HTMLElement[];
+    if (originals.length === 0) return;
+
+    // Sum the natural card widths plus the gaps between them.
+    let cardsWidth = 0;
+    for (const card of originals) cardsWidth += card.getBoundingClientRect().width;
+    if (originals.length > 1) cardsWidth += (originals.length - 1) * STATIC_GAP_PX;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const fits = cardsWidth <= viewport.clientWidth;
+
+    if (fits || prefersReducedMotion) return; // keep the static layout
+
+    // Promote to the scrolling marquee: clone enough cards to fill at least
+    // MIN_CARDS_PER_HALF per half, then duplicate the whole half (aria-hidden)
+    // so translateX(-50%) loops seamlessly.
+    track.classList.remove("marquee-static");
+
+    const repeatCount = Math.max(1, Math.ceil(MIN_CARDS_PER_HALF / originals.length));
+    for (let i = 1; i < repeatCount; i++) {
+      for (const card of originals) {
+        const clone = card.cloneNode(true) as HTMLElement;
+        clone.setAttribute("data-marquee-clone", "");
+        track.appendChild(clone);
+      }
+    }
+
+    const firstHalf = Array.from(track.children) as HTMLElement[];
+    for (const card of firstHalf) {
+      const clone = card.cloneNode(true) as HTMLElement;
+      clone.setAttribute("aria-hidden", "true");
+      clone.setAttribute("data-marquee-clone", "");
+      track.appendChild(clone);
+    }
+
+    const duration = Math.round((firstHalf.length * CARD_STRIDE_PX) / TARGET_SPEED_PX_PER_SEC);
+    track.style.animationDuration = `${duration}s`;
+    track.classList.add("marquee-animated");
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupTestimonialsMarquee);
+  } else {
+    setupTestimonialsMarquee();
+  }
+
+  let resizeTimer: number | undefined;
+  window.addEventListener("resize", () => {
+    if (resizeTimer !== undefined) window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(setupTestimonialsMarquee, 150);
+  });
+
+  window
+    .matchMedia("(prefers-reduced-motion: reduce)")
+    .addEventListener("change", setupTestimonialsMarquee);
+</script>

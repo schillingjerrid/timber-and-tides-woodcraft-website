@@ -81,39 +81,45 @@ const {
         </button>
       </div>
 
-      <!-- Mobile/tablet dropdown nav -->
-      <div
-        id="mobile-nav"
-        class="overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out md:hidden"
-        style="max-height: 0; opacity: 0;"
-      >
-        <nav class="flex flex-col gap-1 border-t border-border px-4 py-3">
-          <a
-            class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
-            href="/projects/"
-            data-mobile-nav-link
-          >Projects</a>
-          <a
-            class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
-            href="/plans/"
-            data-mobile-nav-link
-          >Plans</a>
-          <a
-            class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
-            href="/testimonials/"
-            data-mobile-nav-link
-          >Feedback</a>
-          <a
-            class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
-            href="/about/"
-            data-mobile-nav-link
-          >About</a>
-          <a
-            class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
-            href="/contact/"
-            data-mobile-nav-link
-          >Contact</a>
-        </nav>
+      <!--
+        Mobile/tablet dropdown nav.
+        Absolutely positioned below the sticky header so opening it does not
+        change the header's height (otherwise the scroll-hide handler reads
+        the layout shift as a scroll-down gesture and slams the menu closed).
+      -->
+      <div class="absolute inset-x-0 top-full overflow-hidden md:hidden" aria-hidden="true">
+        <div
+          id="mobile-nav"
+          class="-translate-y-full border-b border-border bg-bg/95 backdrop-blur-sm transition-transform duration-300 ease-in-out"
+        >
+          <nav class="flex flex-col gap-1 px-4 py-3">
+            <a
+              class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
+              href="/projects/"
+              data-mobile-nav-link
+            >Projects</a>
+            <a
+              class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
+              href="/plans/"
+              data-mobile-nav-link
+            >Plans</a>
+            <a
+              class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
+              href="/testimonials/"
+              data-mobile-nav-link
+            >Feedback</a>
+            <a
+              class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
+              href="/about/"
+              data-mobile-nav-link
+            >About</a>
+            <a
+              class="rounded-md px-3 py-2 text-sm text-muted transition hover:bg-surface hover:text-fg"
+              href="/contact/"
+              data-mobile-nav-link
+            >Contact</a>
+          </nav>
+        </div>
       </div>
     </header>
 
@@ -168,15 +174,9 @@ const {
         navOpen = next;
         toggle?.setAttribute("aria-expanded", String(navOpen));
 
-        if (!mobileNav) return;
-
-        if (navOpen) {
-          // Expand: set max-height to scrollHeight so CSS transition works
-          mobileNav.style.maxHeight = mobileNav.scrollHeight + "px";
-          mobileNav.style.opacity = "1";
-        } else {
-          mobileNav.style.maxHeight = "0";
-          mobileNav.style.opacity = "0";
+        if (mobileNav) {
+          mobileNav.classList.toggle("-translate-y-full", !navOpen);
+          mobileNav.parentElement?.setAttribute("aria-hidden", String(!navOpen));
         }
 
         iconMenu?.classList.toggle("hidden", navOpen);
