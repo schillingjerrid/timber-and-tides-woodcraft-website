@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const EMAIL = "you@example.com";
+const EMAIL = "trevor.schilling@timberandtideswoodcraft.com";
 const SUBJECT = "Commission Request";
 const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(SUBJECT)}`;
 ---
@@ -50,10 +50,10 @@ const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(SUBJECT)}`;
       </p>
       <ul class="mt-5 space-y-3">
         {[
-          ["What you want built", "A brief description or sketch — inspiration photos and links are welcome."],
-          ["Approximate dimensions", "Rough width, depth, and height if you have them in mind."],
-          ["Wood species + finish", "Cherry, walnut, maple, white oak — or just tell me the look you’re after."],
-          ["Deadline", "Let me know if there’s a date you’re working toward."],
+          ["What you want built", "A brief description, a sketch, inspiration photos, and/or links will assist in the design process. Pinterest, Google Images, or AI-generated images are good starting points. Bear in mind that AI-generated images can produce shapes and layouts that are not always possible to achieve."],
+          ["Approximate dimensions", "Rough width, depth, and height if you have them in mind, or the size of the space you want the project to fit in."],
+          ["Wood species + desired finish", "Cherry, walnut, maple, white oak - or just tell me the look you're after."],
+          ["Deadline", "Let me know if there's a date you're working toward."],
           ["Budget range", "Helps me propose options that fit what you have in mind."],
         ].map(([label, detail]) => (
           <li class="flex gap-4">

@@ -10,4 +10,4 @@ images:
   - "/testimonials/flores-armando/corn%20hole%20mount.JPG"
 ---
 
-Placeholder testimonial text — update with Armando's actual feedback.
+I love it!

@@ -1,21 +1,21 @@
 ---
 title: "Breadbox Plans"
-excerpt: "Full plans and cut list for a classic french-door breadbox with glass paneled doors and integrated cutting board."
+excerpt: "Full cut list and building instructions for a french door bread box with a slide-out cutting board."
 file: "/plans/bread-box-plans.pdf"
 date: 2025-04-05
 tags: ["hardwood", "box", "kitchen"]
 difficulty: "Intermediate"
-dimensions: "17.5in x 12in x 16in"
+dimensions: "16in x 12.5in x 17.5in"
 materials:
-  - "3/4in thick hardwood of your choice"
-  - "3/4in hardwood veneered plywood"
-  - "cabinet pulls and cabinet hinges"
-  - "Wood glue, sandpaper (80,120,and 320 Grit)"
-  - "Stain of your choice"
+  - "3/4in thick white oak trim"
+  - "3/4in oak veneered plywood"
+  - "Cabinet pulls and cabinet hinges"
+  - "Wood glue, sandpaper (80, 120, and 320 grit)"
+  - "Stain of your choice if desired"
   - "Polyurethane or finish of choice"
   - "Plexi-glass or Real glass panes"
 
-projectSlug: "french-door breadbox"
+projectSlug: "breadbox"
 ---
 
 ## What's Included
