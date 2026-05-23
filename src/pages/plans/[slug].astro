@@ -17,7 +17,10 @@ const { Content } = await plan.render();
 const d = plan.data;
 ---
 
-<BaseLayout title={`${d.title} — Plans`} description={d.excerpt ?? "Woodworking plan details and download."}>
+<BaseLayout
+  title={`${d.title} — Free Woodworking Plan | Timber and Tides Woodcraft`}
+  description={d.excerpt ?? `Free downloadable plan for ${d.title} from Timber and Tides Woodcraft — cut list and dimensioned drawings included.`}
+>
   <article class="py-8">
     <div class="mx-auto max-w-3xl px-4">
       <a href="/plans/" class="text-sm text-muted hover:text-fg transition">← Back to plans</a>

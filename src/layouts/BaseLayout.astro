@@ -1,10 +1,67 @@
 ---
 import "../styles/theme.css";
 
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  noindex?: boolean;
+}
+
 const {
-  title = "Timber and Tides Woodcraft",
-  description = "Handcrafted woodworking projects and commissions.",
+  title = "Timber and Tides Woodcraft — Custom Furniture & Woodworking in Northern Colorado",
+  description = "Custom furniture, cabinets, and handcrafted gifts built one piece at a time in Milliken, Colorado. Commissions welcome across Northern Colorado and the Denver metro.",
+  image = "/images/og-default.jpg",
+  type = "website",
+  noindex = false,
 } = Astro.props;
+
+const SITE_URL = "https://timberandtideswoodcraft.com";
+const SITE_NAME = "Timber and Tides Woodcraft";
+const canonical = new URL(Astro.url.pathname, SITE_URL).href;
+const ogImage = new URL(image, SITE_URL).href;
+
+const businessSchema = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "@id": `${SITE_URL}/#business`,
+  name: SITE_NAME,
+  alternateName: "Timber & Tides Woodcraft",
+  description:
+    "Custom furniture, cabinets, and handcrafted woodworking commissions built in Milliken, Colorado, serving Northern Colorado and the Denver metro.",
+  url: SITE_URL,
+  image: ogImage,
+  logo: `${SITE_URL}/images/logos/tatw-logo_filled.svg`,
+  email: "trevor.schilling@timberandtideswoodcraft.com",
+  priceRange: "$$",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Milliken",
+    addressRegion: "CO",
+    addressCountry: "US",
+  },
+  areaServed: [
+    { "@type": "City", name: "Milliken" },
+    { "@type": "City", name: "Greeley" },
+    { "@type": "City", name: "Loveland" },
+    { "@type": "City", name: "Fort Collins" },
+    { "@type": "City", name: "Windsor" },
+    { "@type": "City", name: "Longmont" },
+    { "@type": "City", name: "Boulder" },
+    { "@type": "City", name: "Denver" },
+    { "@type": "AdministrativeArea", name: "Northern Colorado" },
+  ],
+  knowsAbout: [
+    "Custom furniture",
+    "Cabinet making",
+    "Hardwood woodworking",
+    "Cutting boards",
+    "Bookcases",
+    "Built-ins",
+  ],
+  sameAs: ["https://www.instagram.com/timberandtideswoodcraft/"],
+};
 ---
 
 <!doctype html>
@@ -12,12 +69,41 @@ const {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    <link rel="canonical" href={canonical} />
 
     <meta name="theme-color" content="#0b0f0e" />
+    <meta name="geo.region" content="US-CO" />
+    <meta name="geo.placename" content="Milliken, Colorado" />
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Timber and Tides Woodcraft" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(businessSchema)}
+    />
+
+    <slot name="head" />
   </head>
 
   <body class="min-h-screen bg-bg text-fg">
@@ -144,7 +230,7 @@ const {
         <p>&copy; {new Date().getFullYear()} Timber and Tides Woodcraft</p>
 
         <div class="flex items-center gap-4">
-          <p class="text-zinc-400">Made in Colorado • Commissions welcome</p>
+          <p class="text-zinc-400">Milliken, Colorado • Serving Northern Colorado • Commissions welcome</p>
           <a
             href="https://www.instagram.com/timberandtideswoodcraft/"
             target="_blank"

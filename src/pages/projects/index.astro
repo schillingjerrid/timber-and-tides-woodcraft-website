@@ -11,7 +11,10 @@ const plans = await getCollection("plans");
 const slugsWithPlans = new Set(plans.map((p) => p.data.projectSlug).filter(Boolean));
 ---
 
-<BaseLayout title="Projects — Timber & Tides Woodcraft" description="Browse woodworking projects and case studies.">
+<BaseLayout
+  title="Portfolio of Custom Woodworking Projects — Timber and Tides Woodcraft"
+  description="Custom furniture, cabinets, cutting boards, and commissioned pieces handcrafted in Northern Colorado. Browse the portfolio for inspiration or to commission a similar build."
+>
 
   <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
   <section class="relative overflow-hidden py-16">
@@ -42,6 +45,7 @@ const slugsWithPlans = new Set(plans.map((p) => p.data.projectSlug).filter(Boole
             coverImage={p.data.coverImage}
             tags={p.data.tags}
             hasPlans={slugsWithPlans.has(p.slug)}
+            date={p.data.date}
           />
         ))}
       </div>

@@ -18,12 +18,12 @@ const plans = defineCollection({
 
 const projects = defineCollection({
   type: "content",
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     slug: z.string().optional(),
     date: z.coerce.date(),
-    coverImage: z.string(),
-    gallery: z.array(z.string()).default([]),
+    coverImage: image(),
+    gallery: z.array(image()).default([]),
     featured: z.boolean().default(false),
 
     wood: z.string().optional(),

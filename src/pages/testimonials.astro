@@ -9,7 +9,10 @@ const testimonials = (await getCollection("testimonials")).sort((a, b) => {
 });
 ---
 
-<BaseLayout title="Feedback — Timber & Tides Woodcraft" description="Customer feedback and project accolades.">
+<BaseLayout
+  title="Client Feedback — Northern Colorado Custom Furniture Maker | Timber and Tides Woodcraft"
+  description="Notes from clients and recipients on finished custom pieces by Timber and Tides Woodcraft in Northern Colorado."
+>
 
   <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
   <section class="relative overflow-hidden py-16">
@@ -46,10 +49,10 @@ const testimonials = (await getCollection("testimonials")).sort((a, b) => {
 
               {t.data.images.length > 0 && (
                 <div class="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
-                  {t.data.images.map((src) => (
+                  {t.data.images.map((src, i) => (
                     <img
                       src={src}
-                      alt=""
+                      alt={`Custom woodworking piece for ${t.data.name}${t.data.images.length > 1 ? ` — photo ${i + 1}` : ""}`}
                       class="rounded-lg object-cover aspect-square w-full"
                     />
                   ))}

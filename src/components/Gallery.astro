@@ -1,29 +1,37 @@
 ---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
 type Props = {
-  images?: string[];
+  images?: ImageMetadata[];
   altPrefix?: string;
 };
 
 const props = Astro.props as Props;
-const images: string[] = props.images ?? [];
+const images: ImageMetadata[] = props.images ?? [];
 const altPrefix: string = props.altPrefix ?? "Project photo";
 
 // Unique ID per gallery instance so multiple galleries on a page don't conflict
 const id = `gallery-${Math.random().toString(36).slice(2, 8)}`;
+
+// Pass full-resolution image src list to the client-side lightbox.
+const fullSrcs = images.map((img) => img.src);
 ---
 
 {images.length > 0 && (
   <div class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2" id={id}>
-    {images.map((src: string, i: number) => (
+    {images.map((img: ImageMetadata, i: number) => (
       <button
         type="button"
         class="gallery-thumb overflow-hidden rounded-xl border border-border bg-surface cursor-zoom-in focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         data-index={i}
-        aria-label={`View ${altPrefix} ${i + 1} fullscreen`}
+        aria-label={`View ${altPrefix} — detail ${i + 1} fullscreen`}
       >
-        <img
-          src={src}
-          alt={`${altPrefix} ${i + 1}`}
+        <Image
+          src={img}
+          alt={`${altPrefix} — detail photo ${i + 1}`}
+          width={800}
+          height={800}
           loading="lazy"
           class="h-full w-full object-cover pointer-events-none"
         />
@@ -89,7 +97,7 @@ const id = `gallery-${Math.random().toString(36).slice(2, 8)}`;
   </div>
 )}
 
-<script is:inline define:vars={{ id, images, altPrefix }}>
+<script is:inline define:vars={{ id, fullSrcs, altPrefix }}>
   const gallery = document.getElementById(id);
   if (!gallery) return;
 
@@ -99,10 +107,10 @@ const id = `gallery-${Math.random().toString(36).slice(2, 8)}`;
   let current = 0;
 
   function show(index) {
-    current = (index + images.length) % images.length;
-    lbImg.src = images[current];
-    lbImg.alt = `${altPrefix} ${current + 1}`;
-    lbCounter.textContent = `${current + 1} / ${images.length}`;
+    current = (index + fullSrcs.length) % fullSrcs.length;
+    lbImg.src = fullSrcs[current];
+    lbImg.alt = `${altPrefix} — detail photo ${current + 1}`;
+    lbCounter.textContent = `${current + 1} / ${fullSrcs.length}`;
   }
 
   function open(index) {

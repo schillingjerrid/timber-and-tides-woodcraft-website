@@ -1,22 +1,35 @@
 ---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
 import TagPill from "./TagPill.astro";
 
 type Props = {
   href: string;
   title: string;
   excerpt?: string;
-  coverImage: string;
+  coverImage: ImageMetadata;
   tags?: string[];
   hasPlans?: boolean;
+  date?: Date;
 };
 
 const props = Astro.props as Props;
 const href: string = props.href;
 const title: string = props.title;
 const excerpt: string | undefined = props.excerpt;
-const coverImage: string = props.coverImage;
+const coverImage: ImageMetadata = props.coverImage;
 const tags: string[] = props.tags ?? [];
 const hasPlans: boolean = props.hasPlans ?? false;
+const date: Date | undefined = props.date;
+
+const dateLabel = date
+  ? new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      year: "numeric",
+      timeZone: "UTC",
+    }).format(date)
+  : undefined;
+const dateISO = date ? date.toISOString().slice(0, 10) : undefined;
 ---
 
 <a
@@ -24,9 +37,11 @@ const hasPlans: boolean = props.hasPlans ?? false;
   class="group overflow-hidden rounded-2xl border border-border bg-surface hover:bg-surface-2 transition"
 >
   <div class="relative aspect-16/10 overflow-hidden bg-surface">
-    <img
+    <Image
       src={coverImage}
-      alt={title}
+      alt={`${title} — custom woodworking project`}
+      width={640}
+      height={400}
       loading="lazy"
       class="h-full w-full object-cover group-hover:scale-[1.02] transition"
     />
@@ -41,7 +56,16 @@ const hasPlans: boolean = props.hasPlans ?? false;
   </div>
 
   <div class="p-4">
-    <h3 class="text-base font-semibold">{title}</h3>
+    {dateLabel && (
+      <time
+        datetime={dateISO}
+        class="block text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-secondary"
+      >
+        {dateLabel}
+      </time>
+    )}
+
+    <h3 class={`${dateLabel ? "mt-1.5" : ""} text-base font-semibold`}>{title}</h3>
 
     {excerpt && <p class="mt-1 text-sm text-muted">{excerpt}</p>}
 

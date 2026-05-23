@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Gallery from "../../components/Gallery.astro";
 import TagPill from "../../components/TagPill.astro";
+import { Image } from "astro:assets";
 import { getCollection, getEntryBySlug } from "astro:content";
 
 export async function getStaticPaths() {
@@ -18,9 +19,42 @@ const d = project.data;
 
 const allPlans = await getCollection("plans");
 const relatedPlan = allPlans.find((p) => p.data.projectSlug === slug);
+
+const SITE_URL = "https://timberandtideswoodcraft.com";
+const projectUrl = `${SITE_URL}/projects/${slug}/`;
+const projectImage = new URL(d.coverImage.src, SITE_URL).href;
+
+const projectSchema = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  name: d.title,
+  description: d.excerpt,
+  image: projectImage,
+  url: projectUrl,
+  dateCreated: d.date.toISOString().slice(0, 10),
+  creator: { "@id": `${SITE_URL}/#business` },
+  material: d.wood,
+  keywords: d.tags?.join(", "),
+  ...(d.dimensions ? { size: d.dimensions } : {}),
+};
+
+const pageTitle = `${d.title} — Custom Woodworking | Timber and Tides Woodcraft`;
+const pageDescription =
+  d.excerpt ??
+  `${d.title} — a custom woodworking project handcrafted by Timber and Tides Woodcraft in Northern Colorado.`;
 ---
 
-<BaseLayout title={`${d.title} — Projects`} description={d.excerpt ?? "Woodworking project details."}>
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  image={d.coverImage.src}
+  type="article"
+>
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(projectSchema)}
+    slot="head"
+  />
   <article class="py-8">
     <div class="mx-auto max-w-6xl px-4">
       <a href="/projects/" class="text-sm text-muted hover:text-fg transition">← Back to projects</a>
@@ -56,7 +90,14 @@ const relatedPlan = allPlans.find((p) => p.data.projectSlug === slug);
       </div>
 
       <div class="mt-6 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900">
-        <img src={d.coverImage} alt={d.title} class="h-full w-full object-cover" />
+        <Image
+          src={d.coverImage}
+          alt={`${d.title}${d.wood ? ` in ${d.wood}` : ""} — handcrafted by Timber and Tides Woodcraft in Northern Colorado`}
+          width={1600}
+          height={1000}
+          loading="eager"
+          class="h-full w-full object-cover"
+        />
       </div>
 
       <div class="project-content prose prose-invert mt-8 max-w-none prose-a:text-primary">
