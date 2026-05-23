@@ -107,6 +107,16 @@ const pageDescription =
       <Gallery images={d.gallery} altPrefix={d.title} />
     </div>
   </article>
+
+  <script is:inline>
+    document.querySelectorAll('.project-content a[href^="http"]').forEach((a) => {
+      try {
+        if (new URL(a.href).host !== location.host) {
+          a.setAttribute('target', '_blank');
+        }
+      } catch {}
+    });
+  </script>
 </BaseLayout>
 
 <style>
